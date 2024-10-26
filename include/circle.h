@@ -4,15 +4,19 @@
 #include "vector2.h"
 #include "color.h"
 
-class Circle{
+class Circle final{
     private:
         float radius;
+        float powRadius;
         Color color;
         Vector2 position;
 
     public:
         Circle(float radius, Color color, float x, float y);
         bool coversPoint(Vector2 pos);
+        bool coversPoint(float x, float y);
+        bool possiblyInPoint(float x, float y);
+        Color* GetColor();
 
 
 };

@@ -6,14 +6,16 @@
 
 class Image {
     private:
-        double* pixelsColors;
         int width;
         int height;
 
     public:
+        double* pixelsColors;
+        
         Image(int width, int height);
         ~Image();
-        void SetPixel(int x, int y, Color col);
+        void SetPixelByIndex(int startIndex, Color* col);
+        void SetPixel(int x, int y, Color* col);
         void SetPixelForSDL(int x, int y, uint32_t col);
         double* GetPixels();
         Color GetPixel(int x, int y);

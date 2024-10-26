@@ -4,8 +4,11 @@
 #include <SDL2/SDL_video.h>
 #include <stdio.h>
 #include <unistd.h> 
+#include <iostream>
+#include <chrono>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
+#include <vector>
 
 #include "image.h"
 #include "circle.h"
@@ -17,6 +20,7 @@ SDL_Renderer* renderer = NULL;
 SDL_Texture* tex = NULL;
 Image* image;
 SDL_Rect rect1;
+std::vector<Circle> testCircles;
 
 Color white(1.0, 1.0, 1.0, 1.0);
 Color black(1.0, 0.0, 0.0, 0.0);
@@ -28,13 +32,20 @@ void printLastError(){
     printf("Last SDL Error: %s\n", SDL_GetError());
 }
 
-
 void FillImage(Image* img){
   Color white(1.0, 1.0, 1.0, 1.0);
-  for(int y = 0; y < img->GetWidth(); y++){
-    for (int x = 0; x < img->GetHeight(); x++)
+  int currentIndex = 0;
+  for(int y = 0, maxY = img->GetWidth(); y < maxY; y++){
+    for (int x = 0, maxX = img->GetHeight(); x < maxX; x++)
     {
-      image->SetPixel(x, y, black);
+      img->SetPixelByIndex(currentIndex, &white);
+      for (size_t i = 0; i < testCircles.size(); i++)
+      {
+        if(testCircles[i].possiblyInPoint(x,y) && testCircles[i].coversPoint(x,y)){
+          img->SetPixelByIndex(currentIndex, testCircles[i].GetColor());
+        }
+      }
+      currentIndex+=4;
     }
   }
 }
@@ -49,6 +60,12 @@ void CopyToSurface(Image* img, SDL_Surface* surf){
 }
 
 int main(int argc, char* argv[]){
+  using std::chrono::high_resolution_clock;
+  using std::chrono::duration_cast;
+  using std::chrono::duration;
+  using std::chrono::milliseconds;
+  using std::chrono::nanoseconds;
+
   printf("Hello world!\n");
   
   int sdlInitResult = SDL_Init(
@@ -64,11 +81,32 @@ int main(int argc, char* argv[]){
   window = SDL_CreateWindow("Magul", SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
   image = new Image(WIDTH, HEIGHT);
-  FillImage(image);
 
-  Circle c(2, white, 0, 0);
-  Vector2 testPos(4,4);
-  c.coversPoint(testPos);
+
+  Color colors[6] = { Color(1.0,0.5,0.0,0.0), Color(1.0,0.0,0.5,0.0) , Color(1.0,0.0,0.0,0.5), Color(1.0,0.5,0.5,0.0), Color(1.0,0.0,0.5,0.5), Color(1.0,0.5,0.0,0.5)};
+  const int ROWS = 6, COLS = 6;
+  testCircles.reserve(ROWS*COLS);
+  for (size_t i = 0; i < ROWS; i++)
+  {
+    for (size_t j = 0; j < COLS; j++)
+    {
+      testCircles.push_back(Circle(12 * (j+1), colors[i], 250+100*j,250+100*i));
+      colors[i].r += 1.0/COLS;
+      colors[i].g += 1.0/COLS;
+      colors[i].b += 1.0/COLS;
+    }
+  }
+  
+
+  auto t1 = high_resolution_clock::now();
+  FillImage(image); // TESTING THIS ONE
+  auto t2 = high_resolution_clock::now();
+  auto ms_int = duration_cast<milliseconds>(t2 - t1);
+  duration<double, std::milli> ms_double = t2 - t1;
+  auto ns_int = duration_cast<nanoseconds>(t2 - t1);
+  std::cout << ms_int.count() << "ms\n";
+  std::cout << ms_double.count() << "ms\n";
+  std::cout << ns_int.count() << "ns\n";
 
 
   SDL_Surface* surf = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);

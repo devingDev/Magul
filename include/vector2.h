@@ -1,7 +1,7 @@
 #ifndef _VECTOR2_H
 #define _VECTOR2_H
 
-class Vector2{
+class Vector2 final{
     public:
         float x;
         float y;
