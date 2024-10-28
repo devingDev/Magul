@@ -38,7 +38,7 @@ void FillImage(Image* img){
   for(int y = 0, maxY = img->GetWidth(); y < maxY; y++){
     for (int x = 0, maxX = img->GetHeight(); x < maxX; x++)
     {
-      img->SetPixelByIndex(currentIndex, &white);
+      img->SetPixelByIndex(currentIndex, &black);
       for (size_t i = 0; i < testCircles.size(); i++)
       {
         if(testCircles[i].possiblyInPoint(x,y) && testCircles[i].coversPoint(x,y)){
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]){
   {
     for (size_t j = 0; j < COLS; j++)
     {
-      testCircles.push_back(Circle(12 * (j+1), colors[i], 250+100*j,250+100*i));
+      testCircles.push_back(Circle(18 * (j+1), colors[i], 250+100*j,250+100*i));
       colors[i].r += 1.0/COLS;
       colors[i].g += 1.0/COLS;
       colors[i].b += 1.0/COLS;

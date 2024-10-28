@@ -13,10 +13,10 @@ Image::~Image(){
 
 
 void Image::SetPixelByIndex(int startIndex, Color* col){
-    //if(col->a > 1) col->a = 1;
-    //if(col->r > 1) col->r = 1;
-    //if(col->g > 1) col->g = 1;
-    //if(col->b > 1) col->b = 1;
+    if(col->a > 1) col->a = 1;
+    if(col->r > 1) col->r = 1;
+    if(col->g > 1) col->g = 1;
+    if(col->b > 1) col->b = 1;
 
     pixelsColors[startIndex+0] = col->a;
     pixelsColors[startIndex+1] = col->r;
