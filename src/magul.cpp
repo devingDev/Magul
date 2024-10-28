@@ -88,9 +88,9 @@ int main(int argc, char* argv[]){
   Color colors[6] = { Color(1.0,0.5,0.0,0.0), Color(1.0,0.0,0.5,0.0) , Color(1.0,0.0,0.0,0.5), Color(1.0,0.5,0.5,0.0), Color(1.0,0.0,0.5,0.5), Color(1.0,0.5,0.0,0.5)};
   const int ROWS = 6, COLS = 6;
   testCircles.reserve(ROWS*COLS);
-  for (size_t i = 0; i < ROWS; i++)
+  for (size_t i = 0; i < COLS; i++)
   {
-    for (size_t j = 0; j < COLS; j++)
+    for (size_t j = 0; j < ROWS; j++)
     {
       testCircles.push_back(Circle(18 * (j+1), colors[i], 250+100*j,250+100*i));
       colors[i].r += 1.0/COLS;

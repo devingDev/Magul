@@ -48,7 +48,8 @@ void Image::SetPixelForSDL(int x, int y, uint32_t col){
 }
 
 int Image::GetPixelIndex(int x, int y){
-    return 4 * ((y * this->width) + x);
+    //return 4 * ((y * this->width) + x); // ind sdl2 this goes from top to bottom?
+    return 4 * (((this->height - 1 - y) * this->width) + x);
 }
 
 double* Image::GetPixels(){
