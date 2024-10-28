@@ -27,16 +27,6 @@ void Image::SetPixelByIndex(int startIndex, Color* col){
 
 void Image::SetPixel(int x, int y, Color* col){
     int startIndex = GetPixelIndex(x,y);
-
-    //if(col->a > 1) col->a = 1;
-    //if(col->r > 1) col->r = 1;
-    //if(col->g > 1) col->g = 1;
-    //if(col->b > 1) col->b = 1;
-
-    pixelsColors[startIndex+0] = col->a;
-    pixelsColors[startIndex+1] = col->r;
-    pixelsColors[startIndex+2] = col->g;
-    pixelsColors[startIndex+3] = col->b;
 }
 
 void Image::SetPixelForSDL(int x, int y, uint32_t col){
@@ -46,10 +36,10 @@ void Image::SetPixelForSDL(int x, int y, uint32_t col){
     double g = (double)((col >>  8) & 0xFF) / 255.0;
     double b = (double)((col >>  0) & 0xFF) / 255.0;
 
-    //if(a > 1) a = 1;
-    //if(r > 1) r = 1;
-    //if(g > 1) g = 1;
-    //if(b > 1) b = 1;
+    if(a > 1) a = 1;
+    if(r > 1) r = 1;
+    if(g > 1) g = 1;
+    if(b > 1) b = 1;
 
     pixelsColors[startIndex+0] = a;
     pixelsColors[startIndex+1] = r;

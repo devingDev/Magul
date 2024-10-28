@@ -6,16 +6,16 @@
 
 class Circle final{
     private:
-        float radius;
-        float powRadius;
+        double radius;
+        double powRadius;
         Color color;
         Vector2 position;
 
     public:
-        Circle(float radius, Color color, float x, float y);
+        Circle(double radius, Color color, double x, double y);
         bool coversPoint(Vector2 pos);
-        bool coversPoint(float x, float y);
-        bool possiblyInPoint(float x, float y);
+        bool coversPoint(double x, double y);
+        bool possiblyInPoint(double x, double y);
         Color* GetColor();
 
 

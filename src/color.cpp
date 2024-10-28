@@ -1,7 +1,6 @@
 #include "color.h"
 
 
-
 Color::Color(){
     a=r=g=b=1.0;
 }

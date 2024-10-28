@@ -6,14 +6,14 @@
 
 class Hit{
     public:
-        float t;
+        double t;
         Vector3 point;
         Vector3 normal;
         Color color;
 
     public:
         Hit();
-        Hit(float t, Vector3 point, Vector3 normal, Color color);
+        Hit(double t, Vector3 point, Vector3 normal, Color color);
 
 
 };

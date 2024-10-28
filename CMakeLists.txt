@@ -7,7 +7,7 @@ include_directories("./include")
 
 add_executable (${projectName} src/magul.cpp 
  src/image.cpp src/color.cpp src/circle.cpp src/vector2.cpp
- src/vector3.cpp src/ray.cpp
+ src/vector3.cpp src/ray.cpp src/camera.cpp
 
 )
 

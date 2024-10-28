@@ -3,12 +3,12 @@
 
 class Vector2 final{
     public:
-        float x;
-        float y;
+        double x;
+        double y;
 
     public:
         Vector2();
-        Vector2(float x, float y);
+        Vector2(double x, double y);
         double length();
         Vector2& operator-=(Vector2 const& rhs);
         Vector2 operator-(Vector2 const& rhs);

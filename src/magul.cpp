@@ -14,6 +14,8 @@
 #include "circle.h"
 #include "color.h"
 #include "vector2.h"
+#include "vector3.h"
+#include "camera.h"
 
 SDL_Window * window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -98,8 +100,18 @@ int main(int argc, char* argv[]){
   }
   
 
+  // Create Camera
+  Camera cam(90, 10, 10);
+  Ray testRay1 = cam.generateRay(Vector2( 0,  0));
+  Ray testRay2 = cam.generateRay(Vector2( 5,  5));
+  Ray testRay3 = cam.generateRay(Vector2(10, 10));
+  std::cout << testRay1 << "\n";
+  std::cout << testRay2 << "\n";
+  std::cout << testRay3 << "\n";
+  
+
   auto t1 = high_resolution_clock::now();
-  FillImage(image); // TESTING THIS ONE
+  FillImage(image);
   auto t2 = high_resolution_clock::now();
   auto ms_int = duration_cast<milliseconds>(t2 - t1);
   duration<double, std::milli> ms_double = t2 - t1;
@@ -107,6 +119,10 @@ int main(int argc, char* argv[]){
   std::cout << ms_int.count() << "ms\n";
   std::cout << ms_double.count() << "ms\n";
   std::cout << ns_int.count() << "ns\n";
+
+  
+
+
 
 
   SDL_Surface* surf = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);

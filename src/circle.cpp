@@ -3,7 +3,7 @@
 
 
 
-Circle::Circle(float radius, Color color, float x, float y){
+Circle::Circle(double radius, Color color, double x, double y){
     this->radius = radius;
     this->powRadius =  radius*radius;
     this->color = color;
@@ -20,7 +20,7 @@ bool Circle::coversPoint(Vector2 pos){
     return (circleToPoint.x*circleToPoint.x + circleToPoint.y*circleToPoint.y) < powRadius;
 }
 
-bool Circle::coversPoint(float x, float y){
+bool Circle::coversPoint(double x, double y){
     Vector2 circleToPoint = Vector2(x,y) - this->position;
 
     //double dist = circleToPoint.length();
@@ -29,7 +29,7 @@ bool Circle::coversPoint(float x, float y){
     return (circleToPoint.x*circleToPoint.x + circleToPoint.y*circleToPoint.y) < powRadius;
 }
 
-bool Circle::possiblyInPoint(float x, float y){
+bool Circle::possiblyInPoint(double x, double y){
     return x >= (this->position.x - radius) && x <= (this->position.x + radius)
             && y >= (this->position.y - radius) && y <= (this->position.y + radius);
 }
