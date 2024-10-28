@@ -101,10 +101,10 @@ int main(int argc, char* argv[]){
   
 
   // Create Camera
-  Camera cam(90, 10, 10);
-  Ray testRay1 = cam.generateRay(Vector2( 0,  0));
-  Ray testRay2 = cam.generateRay(Vector2( 5,  5));
-  Ray testRay3 = cam.generateRay(Vector2(10, 10));
+  Camera cam(90, WIDTH, HEIGHT);
+  Ray testRay1 = cam.generateRay(Vector2(0, 0));
+  Ray testRay2 = cam.generateRay(Vector2(WIDTH/2, HEIGHT/2));
+  Ray testRay3 = cam.generateRay(Vector2(WIDTH, HEIGHT));
   std::cout << testRay1 << "\n";
   std::cout << testRay2 << "\n";
   std::cout << testRay3 << "\n";
