@@ -50,3 +50,5 @@ CMakeUserPresets.json
 build/
 .vscode/
 .idea/
+Debug/
+Release/
