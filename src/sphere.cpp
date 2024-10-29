@@ -39,7 +39,12 @@ std::optional<Hit> Sphere::intersect(Ray r){
         }
         
     }else{
-        hit.t = (-b - discriminantSqrt) / (2*a);
+        double solution = (-b - discriminantSqrt) / (2*a);
+        if(r.withinLimits(solution)){
+            hit.t = solution;
+        }else{
+            return std::nullopt;
+        }
     }
 
     

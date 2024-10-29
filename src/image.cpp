@@ -25,8 +25,9 @@ void Image::SetPixelByIndex(int startIndex, Color col){
 }
 
 
-void Image::SetPixel(int x, int y, Color* col){
+void Image::SetPixel(int x, int y, Color col){
     int startIndex = GetPixelIndex(x,y);
+    SetPixelByIndex(startIndex, col);
 }
 
 void Image::SetPixelForSDL(int x, int y, uint32_t col){
