@@ -19,6 +19,39 @@ Color::Color(double a, double r, double g, double b){
     this->b = b;
 }
 
+Color::Color(Vector3 rgb){
+    this->a = 1.0;
+    this->r = rgb.x;
+    this->g = rgb.y;
+    this->b = rgb.z;
+}
+
+Color Color::operator+=(Color const& rhs){
+    this->a += rhs.a;
+    this->r += rhs.r;
+    this->g += rhs.g;
+    this->b += rhs.b;
+    return *this;
+}
+
+Color Color::operator+(Color const& rhs){
+    Color col(*this);
+    return col+=rhs;
+}
+
+Color Color::operator*=(double const& rhs){
+    this->a *= rhs;
+    this->r *= rhs;
+    this->g *= rhs;
+    this->b *= rhs;
+    return *this;
+}
+
+Color Color::operator*(double const& rhs){
+    Color col(*this);
+    return col*=rhs;
+}
+
 std::ostream& operator<<(std::ostream &strm, const Color &a){
     return strm << "(Color R=" << a.r << ", G=" << a.g << ", B=" << a.b  << ", A=" << a.a << ")";
 }

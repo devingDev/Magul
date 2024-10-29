@@ -28,7 +28,7 @@ SDL_Texture* tex = NULL;
 Image image(WIDTH, HEIGHT);;
 SDL_Rect rect1;
 std::vector<Circle> testCircles;
-BasicScene basicScene;
+BasicScene* basicScene;
 
 
 void printLastError(){
@@ -36,7 +36,7 @@ void printLastError(){
 }
 
 void FillImage(Image& img){
-  basicScene.render(img);
+  basicScene->render(img);
   
   return;
 
@@ -130,9 +130,10 @@ int main(int argc, char* argv[]){
   std::cout << (s3.intersect(r1)) << "\n";
 
 
-
+    std::cout << "COLTEST " << Color::red << "\n";
   
 
+  basicScene = new BasicScene();
   auto t1 = high_resolution_clock::now();
   FillImage(image);
   auto t2 = high_resolution_clock::now();
@@ -199,6 +200,8 @@ int main(int argc, char* argv[]){
   SDL_DestroyRenderer(renderer);
 
   SDL_Quit();
+
+  delete(basicScene);
   
   goto end;
   

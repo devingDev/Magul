@@ -2,6 +2,7 @@
 #define _COLOR_H
 
 #include <ostream>
+#include "vector3.h"
 
 //ARGB
 class Color{
@@ -22,7 +23,14 @@ class Color{
     public:
         Color();
         Color(double a, double r, double g, double b);
+        Color(Vector3 rgb);
+        Color operator+=(Color const& rhs);
+        Color operator+(Color const& rhs);
+        
+        Color operator*=(double const& rhs);
+        Color operator*(double const& rhs);
         friend std::ostream& operator<<(std::ostream &strm, const Color &a);
+        //friend Color max(std::ostream &strm, const Color &a);
 
 
 

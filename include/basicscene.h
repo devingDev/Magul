@@ -19,6 +19,7 @@ class BasicScene : public ISampler{
     private:
         virtual Color getColor(Vector2 pos);
         virtual Color getColor(int x, int y);
+        Color shade(Hit& hit);
 
     public:
         BasicScene();

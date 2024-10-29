@@ -6,7 +6,6 @@
 Sphere::Sphere(Vector3 position, double radius, Color color){
     this->position = position;
     this->radius = radius;
-    std::cout << "Assigned color : " << color << "\n";
     this->color = color;
 }
 
