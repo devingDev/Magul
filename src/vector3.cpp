@@ -23,6 +23,37 @@ void Vector3::normalize(){
     this->z = this->z / len;
 }
 
+
+/*
+Vector3 Vector3::cross(Vector3 a, Vector3 b){
+    return Vector3(
+        a.y*b.z - a.z*b.y,
+        a.z*b.x - a.x*b.z,
+        a.x*b.y - a.y*b.x
+    );
+}
+*/
+
+Vector3 Vector3::cross(const Vector3& b) const{
+    return Vector3(
+        this->y*b.z - this->z*b.y,
+        this->z*b.x - this->x*b.z,
+        this->x*b.y - this->y*b.x
+    );
+}
+
+double Vector3::dot(const Vector3& other) const{
+    return this->x * other.x + this->y * other.y + this->z * other.z;
+}
+
+Vector3 Vector3::multiply(const Vector3& other) const{
+    return Vector3(
+      this->x * other.x,  
+      this->y * other.y,  
+      this->z * other.z
+    );
+}
+
 Vector3& Vector3::operator+=(Vector3 const& rhs){
     this->x = this->x + rhs.x;
     this->y = this->y + rhs.y;

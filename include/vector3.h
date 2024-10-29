@@ -15,6 +15,13 @@ class Vector3 final{
         Vector3(double x, double y, double z);
         double length();
         void normalize();
+
+        //static Vector3 cross(Vector3 a, Vector3 b);
+
+        Vector3 cross(const Vector3& other) const;
+        double dot(const Vector3& other) const;
+        Vector3 multiply(const Vector3& other) const;
+        
         Vector3& operator+=(Vector3 const& rhs);
         Vector3 operator+(Vector3 const& rhs);
         Vector3& operator-=(Vector3 const& rhs);
@@ -24,6 +31,8 @@ class Vector3 final{
         double operator*(Vector3 const& rhs);
         Vector3 operator/(double const& rhs);
         Vector3 operator/=(double const& rhs);
+
+
         friend std::ostream& operator<<(std::ostream &strm, const Vector3 &a);
 
 };

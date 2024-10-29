@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 
 SET(projectName magul)
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 find_package(SDL2 2 REQUIRED)
 include_directories("./include")
 
