@@ -11,9 +11,13 @@ Camera::Camera(double angleDeg, int width, int height){
 }
 
 Ray Camera::generateRay(Vector2 pos){
+    return generateRay(pos.x, pos.y);
+}
+
+Ray Camera::generateRay(int x, int y){
     Vector3 direction(
-        pos.x - (this->pictureSizeHalf.x),
-        pos.y - (this->pictureSizeHalf.y),
+        x - (this->pictureSizeHalf.x),
+        y - (this->pictureSizeHalf.y),
         this->dirZ
     );
 
@@ -40,5 +44,9 @@ void Camera::SetCaches(){
     // Precache the dirZ since this won't change unless cam size or angle change
     double angleCalc = tan(this->angleRadian/2);
     this->dirZ = -(this->pictureSizeHalf.x / angleCalc); 
+}
+
+Vector2 Camera::GetSize(){
+    return pictureSize;
 }
 

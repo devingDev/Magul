@@ -14,7 +14,7 @@ class Image {
         
         Image(int width, int height);
         ~Image();
-        void SetPixelByIndex(int startIndex, Color* col);
+        void SetPixelByIndex(int startIndex, Color col);
         void SetPixel(int x, int y, Color* col);
         void SetPixelForSDL(int x, int y, uint32_t col);
         double* GetPixels();

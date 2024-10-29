@@ -16,47 +16,55 @@
 #include "vector2.h"
 #include "vector3.h"
 #include "camera.h"
+#include "ray.h"
+#include "hit.h"
+#include "sphere.h"
+#include "basicscene.h"
+#include "constants.h"
 
 SDL_Window * window = NULL;
 SDL_Renderer* renderer = NULL;
 SDL_Texture* tex = NULL;
-Image* image;
+Image image(WIDTH, HEIGHT);;
 SDL_Rect rect1;
 std::vector<Circle> testCircles;
+BasicScene basicScene;
 
-Color white(1.0, 1.0, 1.0, 1.0);
-Color black(1.0, 0.0, 0.0, 0.0);
-Color red(1.0, 1.0, 0.0, 0.0);
-
-const int WIDTH = 1024, HEIGHT = 1024;
 
 void printLastError(){
     printf("Last SDL Error: %s\n", SDL_GetError());
 }
 
-void FillImage(Image* img){
+void FillImage(Image& img){
+  basicScene.render(img);
+  
+  return;
+
   Color white(1.0, 1.0, 1.0, 1.0);
   int currentIndex = 0;
-  for(int y = 0, maxY = img->GetWidth(); y < maxY; y++){
-    for (int x = 0, maxX = img->GetHeight(); x < maxX; x++)
+  for(int y = 0, maxY = img.GetWidth(); y < maxY; y++){
+    for (int x = 0, maxX = img.GetHeight(); x < maxX; x++)
     {
-      img->SetPixelByIndex(currentIndex, &black);
+      img.SetPixelByIndex(currentIndex, Color::black);
+
       for (size_t i = 0; i < testCircles.size(); i++)
       {
         if(testCircles[i].possiblyInPoint(x,y) && testCircles[i].coversPoint(x,y)){
-          img->SetPixelByIndex(currentIndex, testCircles[i].GetColor());
+          img.SetPixelByIndex(currentIndex, testCircles[i].GetColor());
         }
       }
+
+      
       currentIndex+=4;
     }
   }
 }
 
-void CopyToSurface(Image* img, SDL_Surface* surf){
+void CopyToSurface(Image& img, SDL_Surface* surf){
   for(int y = 0; y < surf->w; y++){
     for (int x = 0; x < surf->h; x++)
     {
-      ((uint32_t*)surf->pixels)[y*img->GetWidth() + x] = image->GetPixelForSDL(x, y);
+      ((uint32_t*)surf->pixels)[y*img.GetWidth() + x] = image.GetPixelForSDL(x, y);
     }
   }
 }
@@ -82,7 +90,6 @@ int main(int argc, char* argv[]){
   
   window = SDL_CreateWindow("Magul", SDL_WINDOWPOS_CENTERED , SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-  image = new Image(WIDTH, HEIGHT);
 
 
   Color colors[6] = { Color(1.0,0.5,0.0,0.0), Color(1.0,0.0,0.5,0.0) , Color(1.0,0.0,0.0,0.5), Color(1.0,0.5,0.5,0.0), Color(1.0,0.0,0.5,0.5), Color(1.0,0.5,0.0,0.5)};
@@ -99,15 +106,31 @@ int main(int argc, char* argv[]){
     }
   }
   
+  
 
-  // Create Camera
-  Camera cam(90, WIDTH, HEIGHT);
-  Ray testRay1 = cam.generateRay(Vector2(0, 0));
-  Ray testRay2 = cam.generateRay(Vector2(WIDTH/2, HEIGHT/2));
-  Ray testRay3 = cam.generateRay(Vector2(WIDTH, HEIGHT));
-  std::cout << testRay1 << "\n";
-  std::cout << testRay2 << "\n";
-  std::cout << testRay3 << "\n";
+
+  Vector3 test1(5,2,-2);
+  Vector3 test2(8,-3, 34);
+  Vector3 test3 = test1 - test2;
+  std::cout << test1 << "\n";
+  std::cout << test3 << "\n";
+
+  Vector3 testM1(2,3,4);
+  Vector3 testM2(1,3,5);
+  std::cout << "Dot product: " << testM1 * testM2 << "\n";
+
+  Sphere s1(Vector3(0, 0, -2), 1, Color::white);
+  Sphere s2(Vector3(0, -1, -2), 1, Color::black);
+  Sphere s3(Vector3(0, 0, 0), 1, Color::green);
+  Ray r1(Vector3(0, 0, 0), Vector3(0, 0, -1));
+  Ray r2(Vector3(0, 0, 0), Vector3(0, 1, -1));
+  std::cout << (s1.intersect(r1)) << "\n";
+  std::cout << (s1.intersect(r2)) << "\n";
+  std::cout << (s2.intersect(r1)) << "\n";
+  std::cout << (s3.intersect(r1)) << "\n";
+
+
+
   
 
   auto t1 = high_resolution_clock::now();
@@ -176,8 +199,6 @@ int main(int argc, char* argv[]){
   SDL_DestroyRenderer(renderer);
 
   SDL_Quit();
-
-  delete(image);
   
   goto end;
   

@@ -22,10 +22,8 @@ Vector2& Vector2::operator-=(Vector2 const& rhs){
 }
 
 Vector2 Vector2::operator-(Vector2 const& rhs){
-    Vector2 vec;
-    vec.x = this->x - rhs.x;
-    vec.y = this->y - rhs.y;
-    return vec;
+    Vector2 vec(*this);
+    return vec-=rhs;
 }
 
 

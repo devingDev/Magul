@@ -34,6 +34,6 @@ bool Circle::possiblyInPoint(double x, double y){
             && y >= (this->position.y - radius) && y <= (this->position.y + radius);
 }
 
-Color* Circle::GetColor(){
-    return &color;
+Color& Circle::GetColor(){
+    return color;
 }

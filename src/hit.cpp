@@ -16,3 +16,15 @@ Hit::Hit(double t, Vector3 point, Vector3 normal, Color color){
     this->normal = normal;
     this->color = color;
 }
+
+std::ostream& operator<<(std::ostream &strm, const Hit &a){
+    return strm << "Hit[t=" << a.t << ", point=" << a.point << ", normal=" << a.normal  << ", color=" << a.color << ")";
+}
+
+std::ostream& operator<<(std::ostream &strm, const std::optional<Hit> &a){
+    if(a){
+        return strm << *a;
+    }
+    return strm << "null";
+}
+

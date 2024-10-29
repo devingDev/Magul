@@ -36,7 +36,7 @@ Vector3 Ray::scaleRayBy(double t){
 }
 
 bool Ray::withinLimits(double t){
-    return (t >= tMin && t <= tMax);
+    return (t > tMin && t < tMax);
 }
 
 std::ostream& operator<<(std::ostream &strm, const Ray &a) {
