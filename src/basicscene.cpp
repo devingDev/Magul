@@ -1,6 +1,11 @@
 
 #include <limits>
 #include <algorithm>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <future>
+#include <chrono>
 
 #include "basicscene.h"
 #include "constants.h"
@@ -12,13 +17,14 @@
 BasicScene::BasicScene(){
     std::cout << "Initializing scene" << "\n";
     cam = Camera(90, WIDTH, HEIGHT);
+    this->myImage = nullptr;
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
     // Huge sphere just for casting a shadow on
     //sceneObjects.push_back(Sphere(Vector3(0,-29994,0), -30000, Color(1.0, 0.8, 0.8, 0.8)));
     sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 0.8, 0.8, 0.8)));
-    //sceneObjects.push_back(Sphere(Vector3(-17,17,-15), 3, Color::white));
+    sceneObjects.push_back(Sphere(Vector3(-17,17,-15), 3, Color::white));
 
     double radius = 2.0;
     //sceneObjects.push_back(Sphere(Vector3(0,0,-15), radius, Color::white));
@@ -170,15 +176,93 @@ Color BasicScene::shade(Hit& hit){
     return phongTotal;
 }
 
+void BasicScene::expensive_task(int x, int y, Image* img, int currentIndex, int amount, int width){
+    // Simulate an expensive task
 
-void BasicScene::render(Image& img){
+    int maxY = y + amount;
+    for(; y < maxY; y++){
+        for(int x = 0; x < width; x++){
+            img->SetPixelByIndex(currentIndex, getColor(x, y));
+            currentIndex += 4;
+        }
+    }
+    std::cout << "thread info : " << x << " " << y << " " << currentIndex << " "
+    << amount << " " << width << "\n";
+}
+
+void BasicScene::render(Image* img){
+    this->myImage = img;
     int width = cam.GetSize().x;
     int height = cam.GetSize().y;
     int currentIndex = 0;
+    int x = 0;
+    int y = 0;
+    bool doneStartingAll = false;
+
+    const int numThreads = 80; // Number of threads
+    const int rowsPerThread = height / numThreads;
+    std::vector<std::future<void>> futures;
+    // Start threads using std::async
+    for (int i = 0; i < numThreads; ++i) {
+        int currentY = y;
+        int yourIndex = currentIndex;
+        futures.push_back(std::async(
+
+            std::launch::async, [this,i,currentY,img,yourIndex,rowsPerThread,width](){
+                return this->expensive_task(0,currentY,this->myImage,yourIndex, rowsPerThread, width); // Ofcourse make foo public in your snippet
+            }
+        ));
+        y += rowsPerThread;
+        currentIndex += (4*width) * rowsPerThread;
+    }
+
+    if(y <= height){
+        expensive_task(0, y, this->myImage, currentIndex, height-y, width);
+    }
+
+    // Wait for at least one thread to complete
+    while (!futures.empty()) {
+        // Wait for the first future to complete
+        for (auto it = futures.begin(); it != futures.end(); ) {
+            if (it->wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+                it->get(); // Retrieve result (if any)
+                it = futures.erase(it); // Remove finished future
+                std::cout << "A thread has completed.\n";
+            } else {
+                ++it;
+            }
+        }
+        /*
+        if(!doneStartingAll && futures.size() < numThreads){
+            for (int i = 0; i < numThreads-futures.size(); ++i){
+                int currentY = y;
+                int yourIndex = currentIndex;
+                futures.push_back(std::async(
+
+                    std::launch::async, [this,i,currentY,img,yourIndex,rowsPerThread,width](){
+                        return this->expensive_task(0,currentY,this->myImage,yourIndex, rowsPerThread, width); // Ofcourse make foo public in your snippet
+                    }
+                ));
+                y += rowsPerThread;
+                currentIndex += (4*width) * rowsPerThread;
+                if(y >= height-rowsPerThread){
+                    doneStartingAll = true;
+                    break;
+                }
+            }
+            
+        }*/
+    }
+
+    return;
+    currentIndex = 0;
     for(int y = 0; y < height; y++){
         for(int x = 0; x < width; x++){
-            img.SetPixelByIndex(currentIndex, getColor(x, y));
+            //img.SetPixelByIndex(currentIndex, getColor(x, y));
             currentIndex+=4;
+            if(currentIndex == 417792){
+                std::cout << "test";
+            }
         }
     }
     

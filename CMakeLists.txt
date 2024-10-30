@@ -26,4 +26,7 @@ TARGET_LINK_LIBRARIES(${projectName}
  
 )
 
-add_definitions(-DSDL_MAIN_HANDLED)
+if (WIN32)
+    add_definitions(-DSDL_MAIN_HANDLED)
+endif (WIN32)
+

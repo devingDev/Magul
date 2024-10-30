@@ -11,6 +11,8 @@
 #include <SDL2/SDL_image.h>
 #include <vector>
 
+
+
 #include "image.h"
 #include "circle.h"
 #include "color.h"
@@ -26,7 +28,8 @@
 SDL_Window * window = NULL;
 SDL_Renderer* renderer = NULL;
 SDL_Texture* tex = NULL;
-Image image(WIDTH, HEIGHT);;
+Image* imgPointer;
+Image image(WIDTH, HEIGHT);
 SDL_Rect rect1;
 std::vector<Circle> testCircles;
 BasicScene* basicScene;
@@ -36,22 +39,22 @@ void printLastError(){
     printf("Last SDL Error: %s\n", SDL_GetError());
 }
 
-void FillImage(Image& img){
+void FillImage(Image* img){
   basicScene->render(img);
   
   return;
 
   Color white(1.0, 1.0, 1.0, 1.0);
   int currentIndex = 0;
-  for(int y = 0, maxY = img.GetWidth(); y < maxY; y++){
-    for (int x = 0, maxX = img.GetHeight(); x < maxX; x++)
+  for(int y = 0, maxY = img->GetWidth(); y < maxY; y++){
+    for (int x = 0, maxX = img->GetHeight(); x < maxX; x++)
     {
-      img.SetPixelByIndex(currentIndex, Color::black);
+      img->SetPixelByIndex(currentIndex, Color::black);
 
       for (size_t i = 0; i < testCircles.size(); i++)
       {
         if(testCircles[i].possiblyInPoint(x,y) && testCircles[i].coversPoint(x,y)){
-          img.SetPixelByIndex(currentIndex, testCircles[i].GetColor());
+          img->SetPixelByIndex(currentIndex, testCircles[i].GetColor());
         }
       }
 
@@ -136,7 +139,8 @@ int main(int argc, char* argv[]){
 
   basicScene = new BasicScene();
   auto t1 = high_resolution_clock::now();
-  FillImage(image);
+  imgPointer = &image;
+  FillImage(imgPointer);
   auto t2 = high_resolution_clock::now();
   auto ms_int = duration_cast<milliseconds>(t2 - t1);
   duration<double, std::milli> ms_double = t2 - t1;

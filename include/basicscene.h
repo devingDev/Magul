@@ -21,6 +21,8 @@ class BasicScene : public ISampler{
         std::vector<DirectionalLight> directionalLights;
         std::vector<PointLight> pointLights;
         Camera cam;
+        Image* myImage;
+        void expensive_task(int x, int y, Image* img, int currIndex, int amount, int width);
     
     private:
         virtual Color getColor(Vector2 pos);
@@ -29,7 +31,7 @@ class BasicScene : public ISampler{
 
     public:
         BasicScene();
-        void render(Image& img);
+        void render(Image* img);
 
 };
 
