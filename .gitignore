@@ -49,6 +49,7 @@ CMakeUserPresets.json
 # Other
 build/
 .vscode/
+.cache/
 .idea/
 Debug/
 Release/
