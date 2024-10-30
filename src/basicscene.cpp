@@ -26,7 +26,7 @@ BasicScene::BasicScene(){
     }
 
 
-    directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-0.7), Color(1.0,1.0,1.0,1.0)* 3));
+    directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-1), Color(1.0,1.0,1.0,1.0)* 3));
     //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-0.7), Color::white));
     //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-0.7), Color(1.0, 1.0, 0.0, 0.0) * 1));
     //directionalLights.push_back(DirectionalLight(Vector3(1,-1,-0.7), Color::blue));
@@ -108,12 +108,14 @@ Color BasicScene::shade(Hit& hit){
         specular = lightInfos[i].incomingColor * specularIntensivity * 0.5 ;
 
 
-        Color phong =  hit.color * (ambient * 0.5 + diffuse + specular);
-        phong.normalize();
+        Color phong =  (ambient * 0.5 + diffuse + specular);
+        //phong.normalize();
 
 
         phongTotal += phong;
     }
+
+    phongTotal = hit.color * phongTotal;
 
     phongTotal.clamp();
     
