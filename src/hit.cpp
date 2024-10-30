@@ -11,12 +11,13 @@ Hit::Hit(){
     this->ray = Ray();
 }
 
-Hit::Hit(double t, Vector3 point, Vector3 normal, Color color, Ray ray){
+Hit::Hit(double t, Vector3 point, Vector3 normal, Color color, Ray ray, int index){
     this->t = t;
     this->point = point;
     this->normal = normal;
     this->color = color;
     this->ray = ray;
+    this->index = index;
 }
 
 std::ostream& operator<<(std::ostream &strm, const Hit &a){

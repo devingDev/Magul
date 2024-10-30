@@ -9,7 +9,7 @@ Sphere::Sphere(Vector3 position, double radius, Color color){
     this->color = color;
 }
 
-std::optional<Hit> Sphere::intersect(Ray ray){
+std::optional<Hit> Sphere::intersect(Ray ray, int index){
     Hit hit = Hit();
 
     // Move ray back (-) by sphere position so its like the sphere is at the origin
@@ -31,11 +31,17 @@ std::optional<Hit> Sphere::intersect(Ray ray){
     if(discriminant > 0){
         double solution1 = (-b + discriminantSqrt) / (2*a);
         double solution2 = (-b - discriminantSqrt) / (2*a);
+        bool foundAny = false;
         if(ray.withinLimits(solution1)){
             hit.t = solution1;
+            foundAny = true;
         }
         if(solution2 < solution1 && ray.withinLimits(solution2)){
             hit.t = solution2;
+            foundAny = true;
+        }
+        if(!foundAny){
+            return std::nullopt;
         }
         
     }else{
@@ -58,6 +64,7 @@ std::optional<Hit> Sphere::intersect(Ray ray){
 
     hit.color = this->color;
     hit.ray = ray;
+    hit.index  = index;
 
     return hit;
 }

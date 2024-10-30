@@ -124,10 +124,10 @@ int main(int argc, char* argv[]){
   Sphere s3(Vector3(0, 0, 0), 1, Color::green);
   Ray r1(Vector3(0, 0, 0), Vector3(0, 0, -1));
   Ray r2(Vector3(0, 0, 0), Vector3(0, 1, -1));
-  std::cout << (s1.intersect(r1)) << "\n";
-  std::cout << (s1.intersect(r2)) << "\n";
-  std::cout << (s2.intersect(r1)) << "\n";
-  std::cout << (s3.intersect(r1)) << "\n";
+  std::cout << (s1.intersect(r1,0)) << "\n";
+  std::cout << (s1.intersect(r2,0)) << "\n";
+  std::cout << (s2.intersect(r1,0)) << "\n";
+  std::cout << (s3.intersect(r1,0)) << "\n";
 
 
     std::cout << "COLTEST " << Color::red << "\n";
