@@ -32,6 +32,8 @@ class Vector3 final{
         Vector3 operator/(double const& rhs);
         Vector3 operator/=(double const& rhs);
 
+        Vector3 operator-();
+
 
         friend std::ostream& operator<<(std::ostream &strm, const Vector3 &a);
 

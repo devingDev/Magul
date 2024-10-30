@@ -11,6 +11,7 @@ add_executable (${projectName} src/magul.cpp
  src/image.cpp src/color.cpp src/circle.cpp src/vector2.cpp
  src/vector3.cpp src/ray.cpp src/hit.cpp src/camera.cpp 
  src/sphere.cpp src/basicscene.cpp src/constants.cpp
+ src/lightinfo.cpp src/directionallight.cpp src/pointlight.cpp
 
 )
 

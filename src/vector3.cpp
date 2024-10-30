@@ -107,6 +107,15 @@ double Vector3::operator*(Vector3 const& rhs){
     return (this->x * rhs.x + this->y * rhs.y + this->z * rhs.z);
 }
 
+Vector3 Vector3::operator-(){
+    Vector3 v;
+    v.x = -x;
+    v.y = -y;
+    v.z = -z;
+    return v;
+}
+
+
 std::ostream& operator<<(std::ostream &strm, const Vector3 &a){
     return strm << "(Vec3: " << a.x << ", " << a.y << ", " << a.z  << ")";
 }

@@ -26,9 +26,18 @@ class Color{
         Color(Vector3 rgb);
         Color operator+=(Color const& rhs);
         Color operator+(Color const& rhs);
+
+        Color operator*=(Color const& rhs);
+        Color operator*(Color const& rhs);
         
         Color operator*=(double const& rhs);
         Color operator*(double const& rhs);
+
+        Color operator/=(double const& rhs);
+        Color operator/(double const& rhs);
+
+        void clamp();
+
         friend std::ostream& operator<<(std::ostream &strm, const Color &a);
         //friend Color max(std::ostream &strm, const Color &a);
 

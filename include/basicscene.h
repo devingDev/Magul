@@ -10,10 +10,16 @@
 #include "image.h"
 #include "isampler.h"
 #include "camera.h"
+#include "ilight.h"
+#include "directionallight.h"
+#include "pointlight.h"
 
 class BasicScene : public ISampler{
     private:
         std::vector<Sphere> sceneObjects;
+        std::vector<DirectionalLight> directionalLights;
+        std::vector<PointLight> pointLights;
+        //std::vector<ILight*> sceneLights;
         Camera cam;
     
     private:

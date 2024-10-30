@@ -1,5 +1,5 @@
-#ifndef _SAMPLERINTERFACE_H
-#define _SAMPLERINTERFACE_H
+#ifndef _ISAMPLER_H
+#define _ISAMPLER_H
 
 #include "vector2.h"
 #include "color.h"
