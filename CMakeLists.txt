@@ -22,6 +22,7 @@ add_executable (${projectName} src/magul.cpp
 TARGET_LINK_LIBRARIES(${projectName}
  SDL2
  SDL2main
+ SDL2_image
  
 )
 

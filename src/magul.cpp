@@ -8,6 +8,7 @@
 #include <chrono>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
+#include <SDL2/SDL_image.h>
 #include <vector>
 
 #include "image.h"
@@ -154,6 +155,8 @@ int main(int argc, char* argv[]){
 
 
   tex = SDL_CreateTextureFromSurface(renderer, surf);
+  IMG_SavePNG(surf, "./render.png");
+  IMG_SaveJPG(surf, "./render.jpg", 5);
   SDL_FreeSurface(surf);
 
 

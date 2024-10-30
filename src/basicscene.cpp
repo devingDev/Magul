@@ -29,7 +29,7 @@ BasicScene::BasicScene(){
            //sceneObjects.push_back(Sphere(Vector3(-10+(j*4 * (rand()%3)),-5+(i*3 * (rand()%3)),-15), radius, colors[j%4]));
         }
     }
-    sceneObjects.push_back(Sphere(Vector3(4, 0, -25), 4, Color::white));
+    /*sceneObjects.push_back(Sphere(Vector3(4, 0, -25), 4, Color::white));
     sceneObjects.push_back(Sphere(Vector3(-4, 0, -25), 4, Color::white));
     sceneObjects.push_back(Sphere(Vector3(5, -1, -20), 3, Color::red));
     sceneObjects.push_back(Sphere(Vector3(-5, -1, -20), 3, Color::red));
@@ -37,9 +37,15 @@ BasicScene::BasicScene(){
     sceneObjects.push_back(Sphere(Vector3(-6, -2, -15), 2, Color::blue));
     sceneObjects.push_back(Sphere(Vector3(7, -3, -12), 1, Color::green));
     sceneObjects.push_back(Sphere(Vector3(-7, -3, -12), 1, Color::green));
+*/
 
 
-    directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white));
+    directionalLights.push_back(DirectionalLight(Vector3(1,1,0.7), Color::red));
+    directionalLights.push_back(DirectionalLight(Vector3(-1,1,0.7), Color::green));
+    directionalLights.push_back(DirectionalLight(Vector3(0,1,0), Color::blue));
+    sceneObjects.push_back(Sphere(Vector3(0, 0, -10), 4, Color(1.0, 0.8, 0.8, 0.8)));
+
+    //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white));
     //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-1), Color(1.0,1.0,1.0,1.0)* 1));
     //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-0.7), Color(1.0, 1.0, 0.0, 0.0) * 1));
     //directionalLights.push_back(DirectionalLight(Vector3(1,-1,-0.7), Color::blue));
@@ -83,6 +89,7 @@ Color BasicScene::getColor(int x, int y){
 }
 
 Color BasicScene::shade(Hit& hit){
+    double ambBoost = 0.3;
     double epsilon = 0.0001;//std::numeric_limits<double>::epsilon()
     Color phongTotal = Color::black;
 
@@ -114,10 +121,10 @@ Color BasicScene::shade(Hit& hit){
             std::optional<Hit> sHit = sceneObjects[s].intersect(sRay, i);
             if(sHit){
                 if((*sHit).t > epsilon && (*sHit).t < sRay.tMax){
-                    Color phong =  hit.color * lightInfos[i].incomingColor * 0.1;
-                    phongTotal += phong;
+                    phongTotal = (phongTotal + hit.color * (lightInfos[i].incomingColor * ambBoost));
                     isInShadow = true;
                     s = sceneObjects.size()+1;
+                    break;
                 }else{
                     
                 }
@@ -130,7 +137,7 @@ Color BasicScene::shade(Hit& hit){
             Color specular = Color::black;
 
             // Ambient
-            ambient = hit.color * lightInfos[i].incomingColor;
+            ambient = (hit.color * lightInfos[i].incomingColor) * ambBoost;
 
             // Diffuse
             double dotNS = lightInfos[i].direction.dot(hit.normal);
@@ -143,19 +150,19 @@ Color BasicScene::shade(Hit& hit){
             }else{
                 double dotSurfaceNormalLightDir = hit.normal.dot(-lightInfos[i].direction);
                 Vector3 reflected = (hit.normal * (2.0 * dotSurfaceNormalLightDir)) + lightInfos[i].direction;
-                reflected.normalize();
+                //reflected.normalize();
 
                 double dotReflectionView = std::max(0.0, reflected.dot(hit.ray.direction));
-                double specularIntensivity = pow(dotReflectionView, 256);
+                double specularIntensivity = pow(dotReflectionView, 1000);
 
-                specular = lightInfos[i].incomingColor * specularIntensivity * 0.1 ;
+                specular = Color(1.0, 1.0, 1.0, 1.0) * lightInfos[i].incomingColor * specularIntensivity;
             }
 
 
-            Color phong =  (ambient * 0.1 + diffuse + specular);
+            
 
 
-            phongTotal += phong;
+            phongTotal = (phongTotal + ambient + diffuse + specular);
             phongTotal.clamp();
         }
 
