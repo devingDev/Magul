@@ -26,15 +26,18 @@ BasicScene::BasicScene(){
     }
 
 
-    //directionalLights.push_back(DirectionalLight(Vector3(-2,-5,-0.5), Color(1.0,1.0,1.0,1.0)* 0.5));
-    directionalLights.push_back(DirectionalLight(Vector3(-2,-5,0.5), Color::white));
+    directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-0.7), Color(1.0,1.0,1.0,1.0)* 3));
+    //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-0.7), Color::white));
+    //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-0.7), Color(1.0, 1.0, 0.0, 0.0) * 1));
+    //directionalLights.push_back(DirectionalLight(Vector3(1,-1,-0.7), Color::blue));
+    //directionalLights.push_back(DirectionalLight(Vector3(-1,1,-0.7), Color::green));
     //sceneLights.push_back(&directionalLights[0]);
 
-    directionalLights.push_back(DirectionalLight(Vector3(2,2,-0.5), Color::white));
+    //directionalLights.push_back(DirectionalLight(Vector3(-1,1,-0.3), Color::white));
     //sceneLights.push_back(&directionalLights[1]);
 
 
-    pointLights.push_back(PointLight(Vector3(-3,-3, -13), Color(1.0,0.0,0.0, 1.0) * 15));
+    //pointLights.push_back(PointLight(Vector3(-2,-2, -12), Color(1.0, 0.0, 0.0, 1.0) * 55));
     //sceneLights.push_back(&pointLights[0]);
 
 }
@@ -67,38 +70,54 @@ Color BasicScene::getColor(int x, int y){
 }
 
 Color BasicScene::shade(Hit& hit){
-    //Vector3 lightDir(1,1,0.7);
-    //lightDir.normalize();
-    //Color ambient = hit.color * 0.1;
-    Color ambient(1.0,0.5,0.5,0.5);
-    //Color diffuse = multiply(0.9 * Math.max(0, dot(lightDir, hitnormal) ) , hit.color());
-    Color diffuse = Color::black;
-    Color specular = Color::black;
-    for (int i = 0; i < directionalLights.size(); i++)
-    {
-        LightInfo lInfo = directionalLights[i].GetInfo(hit.point);
-        //double dotProduct = hit.normal.dot(lInfo.direction);
-        //double diffuseFactor = std::max(0.0, dotProduct);
-        //diffuse +=  lInfo.incomingColor * diffuseFactor;
-        double diffuseStr = std::max(0.0, lInfo.direction.dot(hit.normal));
-        diffuse += lInfo.incomingColor * diffuseStr;
-    }
-    for (int i = 0; i < pointLights.size(); i++)
-    {
-        LightInfo lInfo = pointLights[i].GetInfo(hit.point);
-        //diffuse += (hit.color * lInfo.incomingColor) * 0.9 * std::max(0.0, lInfo.direction * hit.normal);
-        double diffuseStr = std::max(0.0, lInfo.direction.dot(hit.normal));
-        diffuse += lInfo.incomingColor * diffuseStr;
-    }
-    
-    
-    //diffuse.clamp();
+    Color phongTotal = Color::black;
 
-    Color phong = hit.color*(ambient + diffuse);
-    phong.clamp();
+    // Ambient
+    Color ambient = Color::gray;
     
-    return phong;
-    //return diffuse;
+    std::vector<LightInfo> lightInfos;
+
+    // For directional lights
+    for(int i = 0; i < directionalLights.size(); i++) {
+        LightInfo lightInfo = (directionalLights[i]).GetInfo(hit.point);
+        lightInfos.push_back(lightInfo);
+    }
+    // For point lights
+    for(int i = 0; i < pointLights.size(); i++) {
+        LightInfo lightInfo = (pointLights[i]).GetInfo(hit.point);
+        lightInfos.push_back(lightInfo);
+    }
+
+    // Calculate each lightinfo for phong
+    for(int i = 0; i < lightInfos.size(); i++) {
+        Color diffuse = Color::black;
+        Color specular = Color::black;
+
+        // Diffuse
+        double diffuseStrength = std::max(0.0, lightInfos[i].direction.dot(hit.normal));
+        diffuse += lightInfos[i].incomingColor * diffuseStrength;
+
+        // Specular
+        double dotSurfaceNormalLightDir = hit.normal.dot(-lightInfos[i].direction);
+        Vector3 reflected = (hit.normal * (2.0 * dotSurfaceNormalLightDir)) + lightInfos[i].direction;
+        reflected.normalize();
+
+        double dotReflectionView = std::max(0.0, reflected.dot(hit.ray.direction));
+        double specularIntensivity = pow(dotReflectionView, 70);
+
+        specular = lightInfos[i].incomingColor * specularIntensivity * 0.5 ;
+
+
+        Color phong =  hit.color * (ambient * 0.5 + diffuse + specular);
+        phong.normalize();
+
+
+        phongTotal += phong;
+    }
+
+    phongTotal.clamp();
+    
+    return phongTotal;
 }
 
 

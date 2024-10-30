@@ -3,6 +3,7 @@
 
 const Color Color::white = Color(1.0, 1.0, 1.0, 1.0);
 const Color Color::black = Color(1.0, 0.0, 0.0, 0.0);
+const Color Color::gray = Color(1.0, 0.5, 0.5, 0.5);
 const Color Color::red(1.0, 1.0, 0.0, 0.0);
 const Color Color::green = Color(1.0, 0.0, 1.0, 0.0);
 const Color Color::blue = Color(1.0, 0.0, 0.0, 1.0);
@@ -83,6 +84,17 @@ void Color::clamp(){
     if(this->r > 1.0) this->r = 1;
     if(this->g > 1.0) this->g = 1;
     if(this->b > 1.0) this->b = 1;
+}
+
+void Color::normalize(){
+    this->a = 1; 
+    Vector3 vec(this->r, this->g, this->b);
+    double len = vec.length();
+    if(len > 1){
+        this->r /= len;
+        this->g /= len;
+        this->b /= len;
+    }
 }
 
 std::ostream& operator<<(std::ostream &strm, const Color &a){

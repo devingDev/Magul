@@ -8,13 +8,15 @@ Hit::Hit(){
     this->point = Vector3();
     this->normal = Vector3();
     this->color = Color();
+    this->ray = Ray();
 }
 
-Hit::Hit(double t, Vector3 point, Vector3 normal, Color color){
+Hit::Hit(double t, Vector3 point, Vector3 normal, Color color, Ray ray){
     this->t = t;
     this->point = point;
     this->normal = normal;
     this->color = color;
+    this->ray = ray;
 }
 
 std::ostream& operator<<(std::ostream &strm, const Hit &a){

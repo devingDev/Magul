@@ -14,6 +14,7 @@ Ray::Ray(){
 Ray::Ray(Vector3 origin, Vector3 dir){
     this->origin = origin;
     this->direction = dir;
+    this->direction.normalize();
     tMin = 0;
     tMax = std::numeric_limits<double>::infinity();
 }
@@ -21,6 +22,7 @@ Ray::Ray(Vector3 origin, Vector3 dir){
 Ray::Ray(Vector3 origin, Vector3 dir, double tMin, double tMax){
     this->origin = origin;
     this->direction = dir;
+    this->direction.normalize();
     this->tMin = tMin;
     this->tMax = tMax;
 }

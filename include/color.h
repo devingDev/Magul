@@ -15,6 +15,7 @@ class Color{
     public:
         static const Color white;
         static const Color black;
+        static const Color gray;
         static const Color red;
         static const Color green;
         static const Color blue;
@@ -37,6 +38,7 @@ class Color{
         Color operator/(double const& rhs);
 
         void clamp();
+        void normalize();
 
         friend std::ostream& operator<<(std::ostream &strm, const Color &a);
         //friend Color max(std::ostream &strm, const Color &a);

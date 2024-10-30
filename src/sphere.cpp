@@ -9,15 +9,15 @@ Sphere::Sphere(Vector3 position, double radius, Color color){
     this->color = color;
 }
 
-std::optional<Hit> Sphere::intersect(Ray r){
+std::optional<Hit> Sphere::intersect(Ray ray){
     Hit hit = Hit();
 
     // Move ray back (-) by sphere position so its like the sphere is at the origin
-    Vector3 adjustedRayOrigin = r.origin - this->position;
+    Vector3 adjustedRayOrigin = ray.origin - this->position;
 
     // quadratic formula
-    double a = r.direction * r.direction;
-    double b = 2 * (adjustedRayOrigin * r.direction);
+    double a = ray.direction * ray.direction;
+    double b = 2 * (adjustedRayOrigin * ray.direction);
     double c = (adjustedRayOrigin*adjustedRayOrigin) - (this->radius*this->radius);
     
     double discriminant = (b*b) - (4*a*c);
@@ -31,16 +31,16 @@ std::optional<Hit> Sphere::intersect(Ray r){
     if(discriminant > 0){
         double solution1 = (-b + discriminantSqrt) / (2*a);
         double solution2 = (-b - discriminantSqrt) / (2*a);
-        if(r.withinLimits(solution1)){
+        if(ray.withinLimits(solution1)){
             hit.t = solution1;
         }
-        if(solution2 < solution1 && r.withinLimits(solution2)){
+        if(solution2 < solution1 && ray.withinLimits(solution2)){
             hit.t = solution2;
         }
         
     }else{
         double solution = (-b - discriminantSqrt) / (2*a);
-        if(r.withinLimits(solution)){
+        if(ray.withinLimits(solution)){
             hit.t = solution;
         }else{
             return std::nullopt;
@@ -49,7 +49,7 @@ std::optional<Hit> Sphere::intersect(Ray r){
 
     
 
-    hit.point = r.origin + (r.direction * hit.t);
+    hit.point = ray.origin + (ray.direction * hit.t);
 
     // calculate normal
     hit.normal = (hit.point - this->position)/this->radius;
@@ -57,6 +57,7 @@ std::optional<Hit> Sphere::intersect(Ray r){
 
 
     hit.color = this->color;
+    hit.ray = ray;
 
     return hit;
 }

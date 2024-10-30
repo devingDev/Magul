@@ -5,6 +5,7 @@
 #include <optional>
 #include "vector3.h"
 #include "color.h"
+#include "ray.h"
 
 class Hit{
     public:
@@ -12,10 +13,11 @@ class Hit{
         Vector3 point;
         Vector3 normal;
         Color color;
+        Ray ray;
 
     public:
         Hit();
-        Hit(double t, Vector3 point, Vector3 normal, Color color);
+        Hit(double t, Vector3 point, Vector3 normal, Color color, Ray ray);
         friend std::ostream& operator<<(std::ostream &strm, const Hit &a);
         friend std::ostream& operator<<(std::ostream &strm, const std::optional<Hit> &a);
 
