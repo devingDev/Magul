@@ -23,8 +23,8 @@ BasicScene::BasicScene(){
 
     // Huge sphere just for casting a shadow on
     //sceneObjects.push_back(Sphere(Vector3(0,-29994,0), -30000, Color(1.0, 0.8, 0.8, 0.8)));
-    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 0.8, 0.8, 0.8)));
-    sceneObjects.push_back(Sphere(Vector3(-17,17,-15), 3, Color::white));
+    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0)));
+    //sceneObjects.push_back(Sphere(Vector3(-17,17,-15), 3, Color::white));
 
     double radius = 2.0;
     //sceneObjects.push_back(Sphere(Vector3(0,0,-15), radius, Color::white));
@@ -35,7 +35,7 @@ BasicScene::BasicScene(){
            //sceneObjects.push_back(Sphere(Vector3(-10+(j*4 * (rand()%3)),-5+(i*3 * (rand()%3)),-15), radius, colors[j%4]));
         }
     }
-    /*sceneObjects.push_back(Sphere(Vector3(4, 0, -25), 4, Color::white));
+    sceneObjects.push_back(Sphere(Vector3(4, 0, -25), 4, Color::white));
     sceneObjects.push_back(Sphere(Vector3(-4, 0, -25), 4, Color::white));
     sceneObjects.push_back(Sphere(Vector3(5, -1, -20), 3, Color::red));
     sceneObjects.push_back(Sphere(Vector3(-5, -1, -20), 3, Color::red));
@@ -43,13 +43,14 @@ BasicScene::BasicScene(){
     sceneObjects.push_back(Sphere(Vector3(-6, -2, -15), 2, Color::blue));
     sceneObjects.push_back(Sphere(Vector3(7, -3, -12), 1, Color::green));
     sceneObjects.push_back(Sphere(Vector3(-7, -3, -12), 1, Color::green));
-*/
 
 
+
+    //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white));
     directionalLights.push_back(DirectionalLight(Vector3(1,1,0.7), Color::red));
     directionalLights.push_back(DirectionalLight(Vector3(-1,1,0.7), Color::green));
     directionalLights.push_back(DirectionalLight(Vector3(0,1,0), Color::blue));
-    sceneObjects.push_back(Sphere(Vector3(0, 0, -10), 4, Color(1.0, 0.8, 0.8, 0.8)));
+    //sceneObjects.push_back(Sphere(Vector3(0, 0, -10), 4, Color(1.0, 1.0, 1.0, 1.0)));
 
     //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white));
     //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-1), Color(1.0,1.0,1.0,1.0)* 1));
@@ -95,7 +96,7 @@ Color BasicScene::getColor(int x, int y){
 }
 
 Color BasicScene::shade(Hit& hit){
-    double ambBoost = 0.3;
+    double ambBoost = 0.2;
     double epsilon = 0.0001;//std::numeric_limits<double>::epsilon()
     Color phongTotal = Color::black;
 
@@ -143,7 +144,7 @@ Color BasicScene::shade(Hit& hit){
             Color specular = Color::black;
 
             // Ambient
-            ambient = (hit.color * lightInfos[i].incomingColor) * ambBoost;
+            ambient = (hit.color * lightInfos[i].incomingColor);
 
             // Diffuse
             double dotNS = lightInfos[i].direction.dot(hit.normal);
@@ -168,7 +169,7 @@ Color BasicScene::shade(Hit& hit){
             
 
 
-            phongTotal = (phongTotal + ambient + diffuse + specular);
+            phongTotal = (phongTotal + ambient * ambBoost + diffuse * 0.5 + specular * 0.5);
             phongTotal.clamp();
         }
 
