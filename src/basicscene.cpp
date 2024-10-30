@@ -30,11 +30,11 @@ BasicScene::BasicScene(){
     directionalLights.push_back(DirectionalLight(Vector3(-2,-5,0.5), Color::white));
     //sceneLights.push_back(&directionalLights[0]);
 
-    directionalLights.push_back(DirectionalLight(Vector3(2,2,-0.5), Color::red));
+    directionalLights.push_back(DirectionalLight(Vector3(2,2,-0.5), Color::white));
     //sceneLights.push_back(&directionalLights[1]);
 
 
-    pointLights.push_back(PointLight(Vector3(-3,-3, -12), Color(1.0,1.0,1.0, 1.0) * 5));
+    pointLights.push_back(PointLight(Vector3(-3,-3, -13), Color(1.0,0.0,0.0, 1.0) * 15));
     //sceneLights.push_back(&pointLights[0]);
 
 }
