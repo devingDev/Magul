@@ -27,14 +27,14 @@ BasicScene::BasicScene(){
 
 
     //directionalLights.push_back(DirectionalLight(Vector3(-2,-5,-0.5), Color(1.0,1.0,1.0,1.0)* 0.5));
-    directionalLights.push_back(DirectionalLight(Vector3(-2,-5,-0.5), Color::red));
+    directionalLights.push_back(DirectionalLight(Vector3(-2,-5,0.5), Color::white));
     //sceneLights.push_back(&directionalLights[0]);
 
-    directionalLights.push_back(DirectionalLight(Vector3(2,-3,-0.5), Color::green));
+    directionalLights.push_back(DirectionalLight(Vector3(2,2,-0.5), Color::red));
     //sceneLights.push_back(&directionalLights[1]);
 
 
-    pointLights.push_back(PointLight(Vector3(-3,-3, -14), Color(1.0,0.0,0.0, 10.0)));
+    pointLights.push_back(PointLight(Vector3(-3,-3, -12), Color(1.0,0.0,0.0, 1.0) * 5));
     //sceneLights.push_back(&pointLights[0]);
 
 }
@@ -75,19 +75,23 @@ Color BasicScene::shade(Hit& hit){
     for (int i = 0; i < directionalLights.size(); i++)
     {
         LightInfo lInfo = directionalLights[i].GetInfo(hit.point);
-        diffuse += lInfo.incomingColor * 0.9 * std::max(0.0, lInfo.direction * hit.normal);
+        //double dotProduct = hit.normal.dot(lInfo.direction);
+        //double diffuseFactor = std::max(0.0, dotProduct);
+        //diffuse +=  lInfo.incomingColor * diffuseFactor;
+        diffuse += (hit.color * lInfo.incomingColor) * 0.9 * std::max(0.0, lInfo.direction * hit.normal);
     }
     for (int i = 0; i < pointLights.size(); i++)
     {
         LightInfo lInfo = pointLights[i].GetInfo(hit.point);
-        diffuse += lInfo.incomingColor * 0.9 * std::max(0.0, lInfo.direction * hit.normal);
+        diffuse += (hit.color * lInfo.incomingColor) * 0.9 * std::max(0.0, lInfo.direction * hit.normal);
     }
     
-    diffuse.clamp();
-
+    
+    //diffuse.clamp();
 
     Color phong = ambient + diffuse;
     phong.clamp();
+    
     return phong;
     //return diffuse;
 }

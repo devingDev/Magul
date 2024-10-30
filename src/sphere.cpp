@@ -53,6 +53,7 @@ std::optional<Hit> Sphere::intersect(Ray r){
 
     // calculate normal
     hit.normal = (hit.point - this->position)/this->radius;
+    hit.normal.normalize();
 
 
     hit.color = this->color;
