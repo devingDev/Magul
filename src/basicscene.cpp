@@ -1,6 +1,7 @@
 
 #include <limits>
 #include <algorithm>
+#include <cmath>
 #include <thread>
 #include <mutex>
 #include <condition_variable>

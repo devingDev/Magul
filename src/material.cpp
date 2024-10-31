@@ -84,7 +84,7 @@ Color Material::GetColorFromSpherePoint(Vector3 point, double radius){
 
     double vACOSPART = acos(point.y/radius);
     v = (M_PI - (vACOSPART)) / (M_PI);
-    if(isnan(v)){
+    if(std::isnan(v)){
         v = 0;
     }
 
