@@ -10,7 +10,7 @@
 
 class LightInfo{
     public:
-        enum LightType: std::int8_t { directional, point };
+        enum LightType { directional, point };
         Vector3 direction;
         Color incomingColor; 
         LightType lightType;

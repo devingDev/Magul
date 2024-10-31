@@ -2,6 +2,7 @@
 #define _COLOR_H
 
 #include <ostream>
+#include <cstdint>
 #include "vector3.h"
 
 //ARGB
@@ -40,6 +41,9 @@ class Color{
 
         void clamp();
         void normalize();
+
+        static Color SDLToColor(uint32_t color);
+        static uint32_t ColorToSDL(Color color);
 
         friend std::ostream& operator<<(std::ostream &strm, const Color &a);
         //friend Color max(std::ostream &strm, const Color &a);

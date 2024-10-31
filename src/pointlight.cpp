@@ -6,9 +6,10 @@
 
 
 
-PointLight::PointLight(Vector3 pos, Color col){
+PointLight::PointLight(Vector3 pos, Color col, double _intensity){
     this->position = pos;
     this->color = col;
+    this->intensity = _intensity;
 }
 
 LightInfo PointLight::GetInfo(Vector3 point){
@@ -21,7 +22,7 @@ LightInfo PointLight::GetInfo(Vector3 point){
 
     // Get color
     double intensityDivider = dirLength*dirLength;
-    Color outColor = (this->color / intensityDivider);
+    Color outColor = (this->color / intensityDivider) * this->intensity;
 
 
 

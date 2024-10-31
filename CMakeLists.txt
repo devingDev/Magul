@@ -16,7 +16,7 @@ add_executable (${projectName} src/magul.cpp
  src/vector3.cpp src/ray.cpp src/hit.cpp src/camera.cpp 
  src/sphere.cpp src/basicscene.cpp src/constants.cpp
  src/lightinfo.cpp src/directionallight.cpp src/pointlight.cpp
-
+ src/material.cpp
 )
 
 TARGET_LINK_LIBRARIES(${projectName}

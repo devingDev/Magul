@@ -47,7 +47,8 @@ BasicScene::BasicScene(){
 
 
 
-    //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white));
+
+    //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white, 0.1));
     //directionalLights.push_back(DirectionalLight(Vector3(1,1,0.7), Color::red));
     //directionalLights.push_back(DirectionalLight(Vector3(-1,1,0.7), Color::green));
     //directionalLights.push_back(DirectionalLight(Vector3(0,1,0), Color::blue));
@@ -64,8 +65,8 @@ BasicScene::BasicScene(){
     //sceneLights.push_back(&directionalLights[1]);
 
 
-    pointLights.push_back(PointLight(Vector3(0,1, -80), Color::magenta));
-    pointLights.push_back(PointLight(Vector3(0,1, 0), Color::white));
+    pointLights.push_back(PointLight(Vector3(0,1, -30), Color::magenta, 50));
+    pointLights.push_back(PointLight(Vector3(0,5, 0), Color::white, 50));
     //pointLights.push_back(PointLight(Vector3(0,1, -20), Color(1.0, 1.0, 0.0, 1.0) * 50));
     //pointLights.push_back(PointLight(Vector3(0,1, 0), Color(1.0, 1.0, 1.0, 1.0) * 50));
     //sceneLights.push_back(&pointLights[0]);
@@ -121,6 +122,7 @@ Color BasicScene::shade(Hit& hit){
 
     // Calculate each lightinfo for phong
     for(int i = 0; i < lightInfos.size(); i++) {
+        LightInfo& currLightInfo = lightInfos[i];
         // check for shadowing
         bool isInShadow = false;
         for(int s = 0; s < sceneObjects.size(); s++){
@@ -128,12 +130,13 @@ Color BasicScene::shade(Hit& hit){
                 continue;
             }
             Vector3 offsetPos = hit.point + (hit.normal * epsilon);
-            Ray sRay(offsetPos, lightInfos[i].direction);
+            Ray sRay(offsetPos, currLightInfo.direction);
             std::optional<Hit> sHit = sceneObjects[s].intersect(sRay, i);
             if(sHit){
-                if((*sHit).t > epsilon && (*sHit).t < lightInfos[i].tMax){
-                    phongTotal = (phongTotal + hit.color * (lightInfos[i].incomingColor * ambBoost));
+                Hit& shadowHit = *sHit; 
+                if(shadowHit.t > epsilon && shadowHit.t < currLightInfo.tMax){
                     isInShadow = true;
+                    phongTotal = (phongTotal + hit.color * (currLightInfo.incomingColor * ambBoost));
                     break;
                 }else{
                     
@@ -146,30 +149,31 @@ Color BasicScene::shade(Hit& hit){
             Color diffuse = Color::black;
             Color specular = Color::black;
 
-            if(lightInfos[i].lightType == LightInfo::LightType::point){
-                lightInfos[i].incomingColor *= 20;
+            if(currLightInfo.lightType == LightInfo::LightType::point){
+                //currLightInfo.incomingColor *= 20;
             }
 
             // Ambient
-            ambient = (hit.color * lightInfos[i].incomingColor);
+            ambient = (hit.color * currLightInfo.incomingColor);
 
             // Diffuse
-            double dotNS = lightInfos[i].direction.dot(hit.normal);
+            double dotNS = currLightInfo.direction.dot(hit.normal);
             double diffuseStrength = std::max(0.0, dotNS);
-            diffuse = hit.color * lightInfos[i].incomingColor * diffuseStrength;
+            diffuse = hit.color * currLightInfo.incomingColor * diffuseStrength;
 
             // Specular
-            if(dotNS == 0){
+            if(dotNS < 0){
                 specular = Color::black;
             }else{
-                double dotSurfaceNormalLightDir = hit.normal.dot(-lightInfos[i].direction);
-                Vector3 reflected = (hit.normal * (2.0 * dotSurfaceNormalLightDir)) + lightInfos[i].direction;
+                // calculate reflected
+                double dotSurfaceNormalLightDir = hit.normal.dot(-currLightInfo.direction);
+                Vector3 reflected = (hit.normal * (2.0 * dotSurfaceNormalLightDir)) + currLightInfo.direction;
                 //reflected.normalize();
 
                 double dotReflectionView = std::max(0.0, reflected.dot(hit.ray.direction));
-                double specularIntensivity = pow(dotReflectionView, 128);
+                double specularIntensivity = pow(dotReflectionView, 1000);
 
-                specular = Color(1.0, 1.0, 1.0, 1.0) * lightInfos[i].incomingColor * specularIntensivity;
+                specular = Color(1.0, 1.0, 1.0, 1.0) * currLightInfo.incomingColor * specularIntensivity;
             }
 
 
@@ -177,8 +181,8 @@ Color BasicScene::shade(Hit& hit){
 
 
             phongTotal = (phongTotal + ambient * ambBoost + diffuse + specular);
-            phongTotal.clamp();
         }
+        phongTotal.clamp();
 
     }
     return phongTotal;

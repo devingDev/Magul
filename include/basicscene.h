@@ -13,10 +13,12 @@
 #include "ilight.h"
 #include "directionallight.h"
 #include "pointlight.h"
+#include "material.h"
 
 class BasicScene : public ISampler{
     private:
         std::vector<Sphere> sceneObjects;
+        std::vector<Material> materials;
         std::vector<ILight*> sceneLights;
         std::vector<DirectionalLight> directionalLights;
         std::vector<PointLight> pointLights;

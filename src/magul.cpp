@@ -140,7 +140,7 @@ int main(int argc, char* argv[]){
   basicScene = new BasicScene();
   auto t1 = high_resolution_clock::now();
   imgPointer = &image;
-  FillImage(imgPointer);
+  FillImage(imgPointer); // GENERATE IMAGE
   auto t2 = high_resolution_clock::now();
   auto ms_int = duration_cast<milliseconds>(t2 - t1);
   duration<double, std::milli> ms_double = t2 - t1;

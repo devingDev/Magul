@@ -98,6 +98,25 @@ void Color::normalize(){
     }
 }
 
+
+
+Color Color::SDLToColor(uint32_t color){
+    Color ret;
+    ret.a = (double)((color >> 24) & 0xFF) / 255.0;
+    ret.r = (double)((color >> 16) & 0xFF) / 255.0;
+    ret.g = (double)((color >>  8) & 0xFF) / 255.0;
+    ret.b = (double)((color >>  0) & 0xFF) / 255.0;
+    return ret;
+}
+
+uint32_t Color::ColorToSDL(Color color){
+    uint32_t ret =    (((uint32_t)(color.a * 255) & 0xFF) << 24) +
+                        (((uint32_t)(color.r * 255) & 0xFF) << 16) +
+                        (((uint32_t)(color.g * 255) & 0xFF) <<  8) +
+                        (((uint32_t)(color.b * 255) & 0xFF) <<  0);
+    return ret;
+}
+
 std::ostream& operator<<(std::ostream &strm, const Color &a){
     return strm << "(Color R=" << a.r << ", G=" << a.g << ", B=" << a.b  << ", A=" << a.a << ")";
 }

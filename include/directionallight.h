@@ -6,12 +6,13 @@
 
 class DirectionalLight : public ILight{
     public:
-        DirectionalLight(Vector3 direction, Color color);
+        DirectionalLight(Vector3 direction, Color color, double intensity);
         virtual LightInfo GetInfo(Vector3 p) override;
     
     public:
         Vector3 direction;
         Color color;
+        double intensity;
 };
 
 
