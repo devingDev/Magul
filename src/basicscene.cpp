@@ -22,9 +22,9 @@ BasicScene::BasicScene(){
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
-    materials.push_back(new Material("../resources/textures/test.png"));
+    //materials.push_back(new Material("../resources/textures/test.png"));
     //materials.push_back(new Material("../resources/textures/test2.png"));
-    //materials.push_back(new Material("../resources/textures/8ball.png"));
+    materials.push_back(new Material("../resources/textures/8ball.png"));
     //materials.push_back(new Material("../resources/textures/flushed.png"));
 
 
