@@ -42,6 +42,7 @@ class Color{
         void clamp();
         void normalize();
 
+        static Color SDLToColor(uint8_t r, uint8_t g, uint8_t b);
         static Color SDLToColor(uint32_t color);
         static uint32_t ColorToSDL(Color color);
 

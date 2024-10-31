@@ -18,7 +18,7 @@
 class BasicScene : public ISampler{
     private:
         std::vector<Sphere> sceneObjects;
-        std::vector<Material> materials;
+        std::vector<Material*> materials;
         std::vector<ILight*> sceneLights;
         std::vector<DirectionalLight> directionalLights;
         std::vector<PointLight> pointLights;

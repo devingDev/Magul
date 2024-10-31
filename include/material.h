@@ -8,7 +8,9 @@
 class Material{
     public:
         Material(const char* textureFile);
+        ~Material();
         Color GetColor(double u, double v);
+        Color GetColorFromSpherePoint(Vector3 point, double radius);
 
     private:
         SDL_Surface* sTexture;

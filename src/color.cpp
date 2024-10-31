@@ -99,6 +99,15 @@ void Color::normalize(){
 }
 
 
+Color Color::SDLToColor(uint8_t r, uint8_t g, uint8_t b){
+    Color ret;
+    ret.a = 1.0;
+    ret.r = (double)((r >> 16) & 0xFF) / 255.0;
+    ret.g = (double)((g >>  8) & 0xFF) / 255.0;
+    ret.b = (double)((b >>  0) & 0xFF) / 255.0;
+    return ret;
+}
+
 
 Color Color::SDLToColor(uint32_t color){
     Color ret;

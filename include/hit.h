@@ -6,6 +6,7 @@
 #include "vector3.h"
 #include "color.h"
 #include "ray.h"
+#include "material.h"
 
 class Hit{
     public:
@@ -15,6 +16,7 @@ class Hit{
         Color color;
         Ray ray;
         int index;
+        Material* mat;
 
     public:
         Hit();
