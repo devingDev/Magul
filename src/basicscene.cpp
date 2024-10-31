@@ -22,8 +22,9 @@ BasicScene::BasicScene(){
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
     // Huge sphere just for casting a shadow on
-    //sceneObjects.push_back(Sphere(Vector3(0,-29994,0), -30000, Color(1.0, 0.8, 0.8, 0.8)));
     sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0)));
+    //sceneObjects.push_back(Sphere(Vector3(0,-29994,0), -30000, Color(1.0, 0.8, 0.8, 0.8)));
+    //sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0)));
     //sceneObjects.push_back(Sphere(Vector3(-17,17,-15), 3, Color::white));
 
     double radius = 2.0;
@@ -47,9 +48,9 @@ BasicScene::BasicScene(){
 
 
     //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white));
-    directionalLights.push_back(DirectionalLight(Vector3(1,1,0.7), Color::red));
-    directionalLights.push_back(DirectionalLight(Vector3(-1,1,0.7), Color::green));
-    directionalLights.push_back(DirectionalLight(Vector3(0,1,0), Color::blue));
+    //directionalLights.push_back(DirectionalLight(Vector3(1,1,0.7), Color::red));
+    //directionalLights.push_back(DirectionalLight(Vector3(-1,1,0.7), Color::green));
+    //directionalLights.push_back(DirectionalLight(Vector3(0,1,0), Color::blue));
     //sceneObjects.push_back(Sphere(Vector3(0, 0, -10), 4, Color(1.0, 1.0, 1.0, 1.0)));
 
     //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white));
@@ -63,7 +64,10 @@ BasicScene::BasicScene(){
     //sceneLights.push_back(&directionalLights[1]);
 
 
-    //pointLights.push_back(PointLight(Vector3(-2,-2, -12), Color(1.0, 0.0, 0.0, 1.0) * 55));
+    pointLights.push_back(PointLight(Vector3(0,1, -80), Color::magenta));
+    pointLights.push_back(PointLight(Vector3(0,1, 0), Color::white));
+    //pointLights.push_back(PointLight(Vector3(0,1, -20), Color(1.0, 1.0, 0.0, 1.0) * 50));
+    //pointLights.push_back(PointLight(Vector3(0,1, 0), Color(1.0, 1.0, 1.0, 1.0) * 50));
     //sceneLights.push_back(&pointLights[0]);
 
 }
@@ -96,8 +100,8 @@ Color BasicScene::getColor(int x, int y){
 }
 
 Color BasicScene::shade(Hit& hit){
-    double ambBoost = 0.2;
-    double epsilon = 0.0001;//std::numeric_limits<double>::epsilon()
+    double ambBoost = 0.1;
+    double epsilon = 0.00001;//std::numeric_limits<double>::epsilon()
     Color phongTotal = Color::black;
 
     std::vector<LightInfo> lightInfos;
@@ -127,10 +131,9 @@ Color BasicScene::shade(Hit& hit){
             Ray sRay(offsetPos, lightInfos[i].direction);
             std::optional<Hit> sHit = sceneObjects[s].intersect(sRay, i);
             if(sHit){
-                if((*sHit).t > epsilon && (*sHit).t < sRay.tMax){
+                if((*sHit).t > epsilon && (*sHit).t < lightInfos[i].tMax){
                     phongTotal = (phongTotal + hit.color * (lightInfos[i].incomingColor * ambBoost));
                     isInShadow = true;
-                    s = sceneObjects.size()+1;
                     break;
                 }else{
                     
@@ -142,6 +145,10 @@ Color BasicScene::shade(Hit& hit){
             Color ambient = Color::black;
             Color diffuse = Color::black;
             Color specular = Color::black;
+
+            if(lightInfos[i].lightType == LightInfo::LightType::point){
+                lightInfos[i].incomingColor *= 20;
+            }
 
             // Ambient
             ambient = (hit.color * lightInfos[i].incomingColor);
@@ -160,7 +167,7 @@ Color BasicScene::shade(Hit& hit){
                 //reflected.normalize();
 
                 double dotReflectionView = std::max(0.0, reflected.dot(hit.ray.direction));
-                double specularIntensivity = pow(dotReflectionView, 1000);
+                double specularIntensivity = pow(dotReflectionView, 128);
 
                 specular = Color(1.0, 1.0, 1.0, 1.0) * lightInfos[i].incomingColor * specularIntensivity;
             }
@@ -169,7 +176,7 @@ Color BasicScene::shade(Hit& hit){
             
 
 
-            phongTotal = (phongTotal + ambient * ambBoost + diffuse * 0.5 + specular * 0.5);
+            phongTotal = (phongTotal + ambient * ambBoost + diffuse + specular);
             phongTotal.clamp();
         }
 
@@ -200,7 +207,7 @@ void BasicScene::render(Image* img){
     int y = 0;
     bool doneStartingAll = false;
 
-    const int numThreads = 80; // Number of threads
+    const int numThreads = 100; // Number of threads
     const int rowsPerThread = height / numThreads;
     std::vector<std::future<void>> futures;
     // Start threads using std::async

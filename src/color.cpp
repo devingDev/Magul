@@ -7,6 +7,7 @@ const Color Color::gray = Color(1.0, 0.5, 0.5, 0.5);
 const Color Color::red(1.0, 1.0, 0.0, 0.0);
 const Color Color::green = Color(1.0, 0.0, 1.0, 0.0);
 const Color Color::blue = Color(1.0, 0.0, 0.0, 1.0);
+const Color Color::magenta = Color(1.0, 1.0, 0.0, 1.0);
 
 
 Color::Color(){

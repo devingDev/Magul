@@ -19,6 +19,7 @@ class Color{
         static const Color red;
         static const Color green;
         static const Color blue;
+        static const Color magenta;
 
 
     public:

@@ -9,6 +9,7 @@ DirectionalLight::DirectionalLight(Vector3 direction, Color color){
 }
 
 LightInfo DirectionalLight::GetInfo(Vector3 p){
-    return LightInfo(Vector3(this->direction), this->color);
+    return LightInfo(Vector3(this->direction), this->color, LightInfo::LightType::directional,
+        std::numeric_limits<double>::infinity());
 }
 

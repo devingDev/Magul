@@ -181,7 +181,7 @@ int main(int argc, char* argv[]){
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderCopy(renderer, tex, NULL, NULL);
-    SDL_RenderFillRect(renderer, &rect1);
+    //SDL_RenderFillRect(renderer, &rect1);
 
     SDL_RenderPresent(renderer);
 
