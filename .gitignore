@@ -53,3 +53,8 @@ build/
 .idea/
 Debug/
 Release/
+
+render.png
+render.bmp
+render.jpg
+render.jpeg
