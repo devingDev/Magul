@@ -24,10 +24,11 @@ BasicScene::BasicScene(){
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
-    this->materials.push_back(new Material("../resources/textures/test.png"));
-    this->materials.push_back(new Material("../resources/textures/test2.png"));
-    this->materials.push_back(new Material("../resources/textures/8ball.png"));
-    this->materials.push_back(new Material("../resources/textures/flushed.png"));
+    //this->materials.push_back(new Material("../resources/textures/test.png", 1.0));
+    //this->materials.push_back(new Material("../resources/textures/test2.png", 0.0));
+    //this->materials.push_back(new Material("../resources/textures/8ball.png", 1.0));
+    //this->materials.push_back(new Material("../resources/textures/flushed.png", "../resources/textures/flushed_normal.png", 0.0));
+    this->materials.push_back(new Material("../resources/textures/flushed.png", 0.0));
 
 
     double radius = 2.0;
@@ -59,9 +60,10 @@ BasicScene::BasicScene(){
     //sceneObjects.push_back(Sphere(Vector3(-17,17,-15), 3, Color::white));
     sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0), nullptr));
 
-    sceneLights.push_back(new DirectionalLight(Vector3(11,10,0.7), Color::white, 0.7));
-    //sceneLights.push_back(new PointLight(Vector3(0,2, -30), Color::magenta, 50));
-    //sceneLights.push_back(new PointLight(Vector3(0,2, 1), Color::blue, 50));
+    //sceneLights.push_back(new DirectionalLight(Vector3(11,10,0.7), Color::white, 0.7));
+    sceneLights.push_back(new DirectionalLight(Vector3(11,10,11), Color::white, 0.7));
+    sceneLights.push_back(new PointLight(Vector3(0,2, -30), Color::blue, 20));
+    sceneLights.push_back(new PointLight(Vector3(0,2, 1), Color::red, 10));
 
     //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white, 1));
     //directionalLights.push_back(DirectionalLight(Vector3(1,1,0.7), Color::red));
@@ -135,8 +137,10 @@ Color BasicScene::shade(Hit& hit){
         LightInfo& currLightInfo = lightInfos[i];
         Vector3 moveoriginSpherePoint = hit.point - sceneObjects[hit.index].position;
         Color matCol = Color::black;
+        Vector3 normalOffset = Vector3(0,0,0);
         if(hit.mat != nullptr){
             matCol = hit.mat->GetColorFromSpherePoint(moveoriginSpherePoint, sceneObjects[hit.index].radius);
+            normalOffset = hit.mat->GetNormalFromSpherePoint(moveoriginSpherePoint, sceneObjects[hit.index].radius);
         }
         // check for shadowing
         bool isInShadow = false;
@@ -202,6 +206,9 @@ Color BasicScene::shade(Hit& hit){
                 double specularIntensivity = pow(dotReflectionView, 1000);
 
                 specular = Color(1.0, 1.0, 1.0, 1.0) * currLightInfo.incomingColor * specularIntensivity;
+                if(hit.mat != nullptr){
+                    specular *= hit.mat->GetSpecularIntensity();
+                }
             }
 
 
