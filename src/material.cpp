@@ -15,18 +15,13 @@ Material::Material(const char *file){
         return;
     }
 
-    if (SDL_MUSTLOCK(sTexture)) {
-        SDL_LockSurface(sTexture);
-    }
 
     std::cout << "Material created!" <<"\n";
 
 }
 
 Material::~Material(){
-    if (SDL_MUSTLOCK(sTexture)) {
-        SDL_UnlockSurface(sTexture);
-    }
+    std::cout << "Destroying material!" <<"\n";
     if(sTexture != nullptr){
         SDL_FreeSurface(sTexture);
     }
@@ -34,15 +29,22 @@ Material::~Material(){
 
 Color Material::GetColor(double u, double v){
 
-    int x = u * sTexture->w;
+    if (SDL_MUSTLOCK(sTexture)) {
+        SDL_LockSurface(sTexture);
+    }
+    int x = (u) * sTexture->w;
     int y = v * sTexture->h;
     int bpp = sTexture->format->BitsPerPixel;
     uint32_t* pixels = (uint32_t*) sTexture->pixels;
 
-    uint32_t pixel = pixels[y * sTexture->w + x];
+    //uint32_t pixel = pixels[y * sTexture->w + x];
+    uint32_t pixel = pixels[((sTexture->h - 1 - y) * sTexture->w) + x];
     uint8_t r,g,b,a;
     SDL_GetRGBA(pixel, sTexture->format, &r, &g, &b, &a);
 
+    if (SDL_MUSTLOCK(sTexture)) {
+        SDL_UnlockSurface(sTexture);
+    }
 
     return Color(1.0, r/255.0,g/255.0,b/255.0);
     
@@ -80,7 +82,7 @@ Color Material::GetColorFromSpherePoint(Vector3 point, double radius){
     double v=0.5;
 
     //u = (atan2(point.x,point.z) + M_PI) / (M_PI*2.0);
-    u = (atan2(point.z,point.x) + M_PI) / (M_PI*2.0);
+    u = (atan2(point.x,point.z) + M_PI) / (M_PI*2.0);
 
     double vACOSPART = acos(point.y/radius);
     v = (M_PI - (vACOSPART)) / (M_PI);

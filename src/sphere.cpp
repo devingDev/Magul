@@ -3,10 +3,11 @@
 #include <cmath>
 #include "sphere.h"
 
-Sphere::Sphere(Vector3 position, double radius, Color color){
+Sphere::Sphere(Vector3 position, double radius, Color color, Material* mat){
     this->position = position;
     this->radius = radius;
     this->color = color;
+    this->material = mat;
 }
 
 std::optional<Hit> Sphere::intersect(Ray ray, int index){

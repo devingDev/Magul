@@ -13,7 +13,9 @@
 
 
 
-
+Material* BasicScene::getRandomMaterial(){
+    return this->materials[std::rand() % this->materials.size()];
+}
 
 BasicScene::BasicScene(){
     std::cout << "Initializing scene" << "\n";
@@ -22,10 +24,10 @@ BasicScene::BasicScene(){
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
-    //materials.push_back(new Material("../resources/textures/test.png"));
-    //materials.push_back(new Material("../resources/textures/test2.png"));
-    materials.push_back(new Material("../resources/textures/8ball.png"));
-    //materials.push_back(new Material("../resources/textures/flushed.png"));
+    this->materials.push_back(new Material("../resources/textures/test.png"));
+    this->materials.push_back(new Material("../resources/textures/test2.png"));
+    this->materials.push_back(new Material("../resources/textures/8ball.png"));
+    this->materials.push_back(new Material("../resources/textures/flushed.png"));
 
 
     double radius = 2.0;
@@ -37,17 +39,17 @@ BasicScene::BasicScene(){
            //sceneObjects.push_back(Sphere(Vector3(-10+(j*4 * (rand()%3)),-5+(i*3 * (rand()%3)),-15), radius, colors[j%4]));
         }
     }
-    sceneObjects.push_back(Sphere(Vector3(0, -1, -9), 2, Color::white));
+    sceneObjects.push_back(Sphere(Vector3(0, -1, -9), 2, Color::white, getRandomMaterial()));
 
 
-    sceneObjects.push_back(Sphere(Vector3(4, 0, -25), 4, Color::white));
-    sceneObjects.push_back(Sphere(Vector3(-4, 0, -25), 4, Color::white));
-    sceneObjects.push_back(Sphere(Vector3(5, -1, -20), 3, Color::red));
-    sceneObjects.push_back(Sphere(Vector3(-5, -1, -20), 3, Color::red));
-    sceneObjects.push_back(Sphere(Vector3(6, -2, -15), 2, Color::blue));
-    sceneObjects.push_back(Sphere(Vector3(-6, -2, -15), 2, Color::blue));
-    sceneObjects.push_back(Sphere(Vector3(7, -3, -12), 1, Color::green));
-    sceneObjects.push_back(Sphere(Vector3(-7, -3, -12), 1, Color::green));
+    sceneObjects.push_back(Sphere(Vector3(4, 0, -25), 4, Color::white, getRandomMaterial()));
+    sceneObjects.push_back(Sphere(Vector3(-4, 0, -25), 4, Color::white, getRandomMaterial()));
+    sceneObjects.push_back(Sphere(Vector3(5, -1, -20), 3, Color::white, getRandomMaterial()));
+    sceneObjects.push_back(Sphere(Vector3(-5, -1, -20), 3, Color::white, getRandomMaterial()));
+    sceneObjects.push_back(Sphere(Vector3(6, -2, -15), 2, Color::white, getRandomMaterial()));
+    sceneObjects.push_back(Sphere(Vector3(-6, -2, -15), 2, Color::white, getRandomMaterial()));
+    sceneObjects.push_back(Sphere(Vector3(7, -3, -12), 1, Color::white, getRandomMaterial()));
+    sceneObjects.push_back(Sphere(Vector3(-7, -3, -12), 1, Color::white, getRandomMaterial()));
 
 
 
@@ -55,7 +57,7 @@ BasicScene::BasicScene(){
     //sceneObjects.push_back(Sphere(Vector3(0,-29994,0), -30000, Color(1.0, 0.8, 0.8, 0.8)));
     //sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0)));
     //sceneObjects.push_back(Sphere(Vector3(-17,17,-15), 3, Color::white));
-    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0)));
+    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0), nullptr));
 
     sceneLights.push_back(new DirectionalLight(Vector3(11,10,0.7), Color::white, 0.7));
     //sceneLights.push_back(new PointLight(Vector3(0,2, -30), Color::magenta, 50));
@@ -99,7 +101,7 @@ Color BasicScene::getColor(int x, int y){
     for(int i = 0; i < sceneObjects.size(); i++){
         std::optional<Hit> hit = sceneObjects[i].intersect(cam.generateRay(x,y), i);
         if(hit){
-            (*hit).mat = materials[std::rand() % materials.size()];
+            (*hit).mat = sceneObjects[i].material;
             if((*hit).t < smallestT){
                 smallestHit = hit;
                 smallestT = (*hit).t;
@@ -131,8 +133,11 @@ Color BasicScene::shade(Hit& hit){
     // Calculate each lightinfo for phong
     for(int i = 0; i < lightInfos.size(); i++) {
         LightInfo& currLightInfo = lightInfos[i];
-        Vector3 moveoriginSpherePoint = hit.point - sceneObjects[i].position;
-        Color matCol = hit.mat->GetColorFromSpherePoint(moveoriginSpherePoint, sceneObjects[i].radius);
+        Vector3 moveoriginSpherePoint = hit.point - sceneObjects[hit.index].position;
+        Color matCol = Color::black;
+        if(hit.mat != nullptr){
+            matCol = hit.mat->GetColorFromSpherePoint(moveoriginSpherePoint, sceneObjects[hit.index].radius);
+        }
         // check for shadowing
         bool isInShadow = false;
         for(int s = 0; s < sceneObjects.size(); s++){
@@ -148,7 +153,7 @@ Color BasicScene::shade(Hit& hit){
                     isInShadow = true;
                     //Color inShadowColor = hit.color * (currLightInfo.incomingColor * ambBoost);
                     Color inShadowColor = (hit.color * currLightInfo.incomingColor * ambBoost);
-                    if(hit.mat != nullptr && hit.index == 0){
+                    if(hit.mat != nullptr){
                         inShadowColor *= matCol;
                     }
                     phongTotal = (phongTotal + inShadowColor);
@@ -171,7 +176,7 @@ Color BasicScene::shade(Hit& hit){
             // Ambient
             //ambient = (hit.color * currLightInfo.incomingColor);
             ambient = (hit.color * currLightInfo.incomingColor);
-            if(hit.mat != nullptr && hit.index == 0){
+            if(hit.mat != nullptr){
                 ambient *= matCol;
             }
 
@@ -180,7 +185,7 @@ Color BasicScene::shade(Hit& hit){
             double diffuseStrength = std::max(0.0, dotNS);
             //diffuse = hit.color * currLightInfo.incomingColor * diffuseStrength;
             diffuse = hit.color * currLightInfo.incomingColor * diffuseStrength;
-            if(hit.mat != nullptr && hit.index == 0){
+            if(hit.mat != nullptr){
                 diffuse *= matCol ;
             }
 

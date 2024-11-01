@@ -12,9 +12,10 @@ class Sphere{
         Vector3 position;
         double radius;
         Color color;
+        Material* material;
 
     public:
-        Sphere(Vector3 position, double radius, Color color);
+        Sphere(Vector3 position, double radius, Color color, Material* mat);
         //Sphere(Vector3 position, double radius) : Sphere(position, radius, white){};
         std::optional<Hit> intersect(Ray ray, int index);
 

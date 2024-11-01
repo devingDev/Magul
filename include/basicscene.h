@@ -24,6 +24,7 @@ class BasicScene : public ISampler{
         std::vector<PointLight> pointLights;
         Camera cam;
         Image* myImage;
+        Material* getRandomMaterial();
         void expensive_task(int x, int y, Image* img, int currIndex, int amount, int width);
     
     private:

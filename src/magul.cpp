@@ -10,6 +10,7 @@
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_image.h>
 #include <vector>
+#include <ctime>
 
 
 
@@ -74,6 +75,7 @@ void CopyToSurface(Image& img, SDL_Surface* surf){
 }
 
 int main(int argc, char* argv[]){
+  std::srand(std::time(nullptr));
   using std::chrono::high_resolution_clock;
   using std::chrono::duration_cast;
   using std::chrono::duration;
@@ -123,9 +125,9 @@ int main(int argc, char* argv[]){
   Vector3 testM2(1,3,5);
   std::cout << "Dot product: " << testM1 * testM2 << "\n";
 
-  Sphere s1(Vector3(0, 0, -2), 1, Color::white);
-  Sphere s2(Vector3(0, -1, -2), 1, Color::black);
-  Sphere s3(Vector3(0, 0, 0), 1, Color::green);
+  Sphere s1(Vector3(0, 0, -2), 1, Color::white, nullptr);
+  Sphere s2(Vector3(0, -1, -2), 1, Color::black, nullptr);
+  Sphere s3(Vector3(0, 0, 0), 1, Color::green, nullptr);
   Ray r1(Vector3(0, 0, 0), Vector3(0, 0, -1));
   Ray r2(Vector3(0, 0, 0), Vector3(0, 1, -1));
   std::cout << (s1.intersect(r1,0)) << "\n";

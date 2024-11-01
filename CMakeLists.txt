@@ -4,7 +4,7 @@ SET(projectName magul)
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-#find_package(SDL2 2 REQUIRED)
+find_package(SDL2 2 REQUIRED)
 include_directories("./include")
 if (WIN32)
     include_directories("C:/Projects/Libs/SDL2/include")
@@ -29,4 +29,3 @@ TARGET_LINK_LIBRARIES(${projectName}
 if (WIN32)
     add_definitions(-DSDL_MAIN_HANDLED)
 endif (WIN32)
-
