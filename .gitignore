@@ -53,6 +53,7 @@ build/
 .idea/
 Debug/
 Release/
+resources/textures/nocommit/
 
 render.png
 render.bmp
