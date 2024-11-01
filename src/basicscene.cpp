@@ -14,20 +14,17 @@
 
 
 
-Material* BasicScene::getRandomMaterial(){
-    return this->materials[std::rand() % this->materials.size()];
-}
 
 void BasicScene::InitializeSampleScene(){
     std::cout << "Initializing scene" << "\n";
+
     cam = Camera(90, WIDTH, HEIGHT);
-    this->myImage = nullptr;
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
     //this->materials.push_back(new Material(path + "../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 1.0));
     this->materials.push_back(new Material("../resources/textures/nocommit/Ground080_4K-PNG_Color.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 0.0));
-    this->materials.push_back(new Material("../resources/textures/nocommit/Ground080_4K-PNG_Color.png", nullptr, Vector2(0.0001,0.0001), Vector2(0.0,-0.0), 0.0));
+    //this->materials.push_back(new Material("../resources/textures/nocommit/Ground080_4K-PNG_Color.png", nullptr, Vector2(0.0001,0.0001), Vector2(0.0,-0.0), 0.0));
     this->materials.push_back(new Material("../resources/textures/nocommit/Rocks010_4K-PNG_Color.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 0.0));
     //this->materials.push_back(new Material(path + "../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,-0.0), 1.0));
     //this->materials.push_back(new Material(path + "../resources/textures/test2.png", 0.0));
@@ -47,7 +44,8 @@ void BasicScene::InitializeSampleScene(){
     sceneObjects.push_back(Sphere(Vector3(7, -3, -12), 1, Color::white, getRandomMaterial()));
     sceneObjects.push_back(Sphere(Vector3(-7, -3, -12), 1, Color::white, new Material("../resources/textures/flushed.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,0.0), 0.2)));
 
-    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0), this->materials[1]));
+    // Huge sphere
+    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0), new Material("../resources/textures/nocommit/Ground080_4K-PNG_Color.png", nullptr, Vector2(0.0001,0.0001), Vector2(0.0,-0.0), 0.0)));
 
     //sceneLights.push_back(new DirectionalLight(Vector3(11,10,0.7), Color::white, 0.7));
     sceneLights.push_back(new DirectionalLight(Vector3(11,10,11), Color::white, 0.7));
@@ -56,10 +54,16 @@ void BasicScene::InitializeSampleScene(){
 }
 
 BasicScene::BasicScene(){
+    this->myImage = nullptr;
     this->InitializeSampleScene();
-
 }
 
+Material* BasicScene::getRandomMaterial(){
+    if(materials.size() <= 0){
+        return nullptr;
+    }
+    return this->materials[std::rand() % this->materials.size()];
+}
 
 Color BasicScene::getColor(Vector2 pos){
     return getColor(pos.x, pos.y);
@@ -82,7 +86,6 @@ Color BasicScene::getColor(int x, int y){
 
     if(smallestHit){
         return shade((*smallestHit));
-        //return Color((*smallestHit).color);
     }
 
     return Color::black;
@@ -90,7 +93,7 @@ Color BasicScene::getColor(int x, int y){
 
 Color BasicScene::shade(Hit& hit){
     double ambBoost = 0.5;
-    double epsilon = 0.00001;//std::numeric_limits<double>::epsilon()
+    double epsilon = 0.00001; //std::numeric_limits<double>::epsilon()
     Color phongTotal = Color::black;
 
     std::vector<LightInfo> lightInfos;
@@ -124,7 +127,6 @@ Color BasicScene::shade(Hit& hit){
                 Hit& shadowHit = *sHit; 
                 if(shadowHit.t > epsilon && shadowHit.t < currLightInfo.tMax){
                     isInShadow = true;
-                    //Color inShadowColor = hit.color * (currLightInfo.incomingColor * ambBoost);
                     Color inShadowColor = (hit.color * currLightInfo.incomingColor * ambBoost);
                     if(hit.mat != nullptr){
                         inShadowColor *= matCol;
@@ -189,9 +191,7 @@ Color BasicScene::shade(Hit& hit){
     return phongTotal;
 }
 
-void BasicScene::expensive_task(int x, int y, Image* img, int currentIndex, int amount, int width){
-    // Simulate an expensive task
-
+void BasicScene::render_task(int x, int y, Image* img, int currentIndex, int amount, int width){
     int maxY = y + amount;
     for(; y < maxY; y++){
         for(int x = 0; x < width; x++){
@@ -199,8 +199,6 @@ void BasicScene::expensive_task(int x, int y, Image* img, int currentIndex, int 
             currentIndex += 4;
         }
     }
-    //std::cout << "thread info : " << x << " " << y << " " << currentIndex << " "
-    //<< amount << " " << width << "\n";
 }
 
 void BasicScene::render(Image* img){
@@ -222,7 +220,7 @@ void BasicScene::render(Image* img){
         futures.push_back(std::async(
 
             std::launch::async, [this,i,currentY,img,yourIndex,rowsPerThread,width](){
-                return this->expensive_task(0,currentY,this->myImage,yourIndex, rowsPerThread, width); // Ofcourse make foo public in your snippet
+                return this->render_task(0,currentY,this->myImage,yourIndex, rowsPerThread, width); // Ofcourse make foo public in your snippet
             }
         ));
         y += rowsPerThread;
@@ -230,7 +228,7 @@ void BasicScene::render(Image* img){
     }
 
     if(y <= height){
-        expensive_task(0, y, this->myImage, currentIndex, height-y, width);
+        this->render_task(0, y, this->myImage, currentIndex, height-y, width);
     }
 
     // Wait for at least one thread to complete
@@ -240,45 +238,11 @@ void BasicScene::render(Image* img){
             if (it->wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
                 it->get(); // Retrieve result (if any)
                 it = futures.erase(it); // Remove finished future
-                //std::cout << "A thread has completed.\n";
             } else {
                 ++it;
             }
         }
-        /*
-        if(!doneStartingAll && futures.size() < numThreads){
-            for (int i = 0; i < numThreads-futures.size(); ++i){
-                int currentY = y;
-                int yourIndex = currentIndex;
-                futures.push_back(std::async(
-
-                    std::launch::async, [this,i,currentY,img,yourIndex,rowsPerThread,width](){
-                        return this->expensive_task(0,currentY,this->myImage,yourIndex, rowsPerThread, width); // Ofcourse make foo public in your snippet
-                    }
-                ));
-                y += rowsPerThread;
-                currentIndex += (4*width) * rowsPerThread;
-                if(y >= height-rowsPerThread){
-                    doneStartingAll = true;
-                    break;
-                }
-            }
-            
-        }*/
     }
-
-    return;
-    currentIndex = 0;
-    for(int y = 0; y < height; y++){
-        for(int x = 0; x < width; x++){
-            //img.SetPixelByIndex(currentIndex, getColor(x, y));
-            currentIndex+=4;
-            if(currentIndex == 417792){
-                std::cout << "test";
-            }
-        }
-    }
-    
 }
 
 

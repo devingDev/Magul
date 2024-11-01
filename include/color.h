@@ -47,7 +47,6 @@ class Color{
         static uint32_t ColorToSDL(Color color);
 
         friend std::ostream& operator<<(std::ostream &strm, const Color &a);
-        //friend Color max(std::ostream &strm, const Color &a);
 
 
 

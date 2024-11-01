@@ -26,7 +26,7 @@ class BasicScene : public ISampler{
         Image* myImage;
         void InitializeSampleScene();
         Material* getRandomMaterial();
-        void expensive_task(int x, int y, Image* img, int currIndex, int amount, int width);
+        void render_task(int x, int y, Image* img, int currIndex, int amount, int width);
     
     private:
         virtual Color getColor(Vector2 pos);

@@ -86,7 +86,7 @@ Color Material::GetColor(SDL_Surface* texForCol, Vector2 uv){
     int y = uv.y * texForCol->h;
     int bpp = texForCol->format->BitsPerPixel;
     uint32_t* pixels = (uint32_t*) texForCol->pixels;
-    //uint32_t pixel = pixels[y * _MainTex->w + x];
+    //uint32_t pixel = pixels[y * _MainTex->w + x]; // upside down
     uint32_t pixel = pixels[((texForCol->h - 1 - y) * texForCol->w) + x];
     uint8_t r,g,b,a;
     // Get the RGBA colors from the surface
@@ -103,7 +103,6 @@ Vector2 Material::CalculateUV(Vector3 point, double radius){
     double u=0.5;
     double v=0.5;
 
-    //u = (atan2(point.x,point.z) + M_PI) / (M_PI*2.0);
     u = (atan2(point.x,point.z) + M_PI) / (M_PI*2.0);
     if(std::isnan(v)){
         u = 0;

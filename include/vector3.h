@@ -16,8 +16,6 @@ class Vector3 final{
         double length();
         void normalize();
 
-        //static Vector3 cross(Vector3 a, Vector3 b);
-
         Vector3 cross(const Vector3& other) const;
         double dot(const Vector3& other) const;
         Vector3 multiply(const Vector3& other) const;
