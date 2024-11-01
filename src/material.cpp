@@ -1,7 +1,7 @@
 
 #include <cmath>
 #include <iostream>
-
+#include <unistd.h>
 
 #include "material.h"
 
@@ -20,7 +20,7 @@ Material::Material(const char* mainTextureFile, const char* normalMapFile, Vecto
     if(mainTextureFile != nullptr){
         this->_MainTex = IMG_Load(mainTextureFile);
         if(this->_MainTex == nullptr){
-            std::cout << "Couldn't create surface from MAIN texture : " << mainTextureFile << "\n";
+            std::cout << "Couldn't create surface from MAIN texture : " << mainTextureFile << " Error: " << IMG_GetError() << "\n";
         }
     }
 
@@ -29,7 +29,7 @@ Material::Material(const char* mainTextureFile, const char* normalMapFile, Vecto
     if(normalMapFile != nullptr){
         this->_NormalTex  = IMG_Load(normalMapFile);
         if(this->_NormalTex == nullptr){
-            std::cout << "Couldn't create surface from NORMAL texture : " << normalMapFile << "\n";
+            std::cout << "Couldn't create surface from MAIN texture : " << normalMapFile << " Error: " << IMG_GetError() << "\n";
         }
     }
 

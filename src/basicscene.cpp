@@ -24,8 +24,11 @@ void BasicScene::InitializeSampleScene(){
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
-    this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 1.0));
-    this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,-0.0), 1.0));
+    //this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 1.0));
+    this->materials.push_back(new Material("../resources/textures/nocommit/Ground080_4K-PNG_Color.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 0.0));
+    this->materials.push_back(new Material("../resources/textures/nocommit/Ground080_4K-PNG_Color.png", nullptr, Vector2(0.0001,0.0001), Vector2(0.0,-0.0), 0.0));
+    this->materials.push_back(new Material("../resources/textures/nocommit/Rocks010_4K-PNG_Color.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 0.0));
+    //this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,-0.0), 1.0));
     //this->materials.push_back(new Material("../resources/textures/test2.png", 0.0));
     //this->materials.push_back(new Material("../resources/textures/8ball.png", 1.0));
     //this->materials.push_back(new Material("../resources/textures/flushed.png", "../resources/textures/flushed_normal.png", 0.0));
@@ -43,7 +46,7 @@ void BasicScene::InitializeSampleScene(){
     sceneObjects.push_back(Sphere(Vector3(7, -3, -12), 1, Color::white, getRandomMaterial()));
     sceneObjects.push_back(Sphere(Vector3(-7, -3, -12), 1, Color::white, new Material("../resources/textures/flushed.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,0.0), 0.2)));
 
-    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0), this->materials[0]));
+    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0), this->materials[1]));
 
     //sceneLights.push_back(new DirectionalLight(Vector3(11,10,0.7), Color::white, 0.7));
     sceneLights.push_back(new DirectionalLight(Vector3(11,10,11), Color::white, 0.7));
