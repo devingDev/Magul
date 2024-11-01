@@ -2,6 +2,7 @@
 #define _MATERIAL_H
 
 #include <SDL2/SDL_image.h>
+#include <string>
 
 #include "color.h"
 #include "vector2.h"

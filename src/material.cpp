@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <unistd.h>
+#include "helper.h"
 
 #include "material.h"
 
@@ -15,21 +16,25 @@ Material::Material(const char* mainTextureFile, const char* normalMapFile, Vecto
 Material::Material(const char* mainTextureFile, const char* normalMapFile, Vector2 _tiling, Vector2 _offset, double _specularIntensity){
     std::cout << "Material creation." <<"\n";
 
+    std::string basePath = SDL_GetBasePath();
+
     // Load main texture
     this->_MainTex = nullptr;
     if(mainTextureFile != nullptr){
-        this->_MainTex = IMG_Load(mainTextureFile);
+        std::string pathMainTex = basePath + mainTextureFile;
+        this->_MainTex = IMG_Load(pathMainTex.c_str());
         if(this->_MainTex == nullptr){
-            std::cout << "Couldn't create surface from MAIN texture : " << mainTextureFile << " Error: " << IMG_GetError() << "\n";
+            std::cout << "Couldn't create surface from MAIN texture : " << pathMainTex << " Error: " << IMG_GetError() << "\n";
         }
     }
 
     // Load normal texture
     this->_NormalTex = nullptr;
     if(normalMapFile != nullptr){
-        this->_NormalTex  = IMG_Load(normalMapFile);
+        std::string pathNormalTex = basePath + normalMapFile;
+        this->_NormalTex  = IMG_Load(pathNormalTex.c_str());
         if(this->_NormalTex == nullptr){
-            std::cout << "Couldn't create surface from MAIN texture : " << normalMapFile << " Error: " << IMG_GetError() << "\n";
+            std::cout << "Couldn't create surface from MAIN texture : " << pathNormalTex << " Error: " << IMG_GetError() << "\n";
         }
     }
 

@@ -7,6 +7,7 @@
 #include <condition_variable>
 #include <future>
 #include <chrono>
+#include <string>
 
 #include "basicscene.h"
 #include "constants.h"
@@ -24,15 +25,15 @@ void BasicScene::InitializeSampleScene(){
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
-    //this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 1.0));
+    //this->materials.push_back(new Material(path + "../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 1.0));
     this->materials.push_back(new Material("../resources/textures/nocommit/Ground080_4K-PNG_Color.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 0.0));
     this->materials.push_back(new Material("../resources/textures/nocommit/Ground080_4K-PNG_Color.png", nullptr, Vector2(0.0001,0.0001), Vector2(0.0,-0.0), 0.0));
     this->materials.push_back(new Material("../resources/textures/nocommit/Rocks010_4K-PNG_Color.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 0.0));
-    //this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,-0.0), 1.0));
-    //this->materials.push_back(new Material("../resources/textures/test2.png", 0.0));
-    //this->materials.push_back(new Material("../resources/textures/8ball.png", 1.0));
-    //this->materials.push_back(new Material("../resources/textures/flushed.png", "../resources/textures/flushed_normal.png", 0.0));
-    //this->materials.push_back(new Material("../resources/textures/flushed.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,0.0), 0.2));
+    //this->materials.push_back(new Material(path + "../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,-0.0), 1.0));
+    //this->materials.push_back(new Material(path + "../resources/textures/test2.png", 0.0));
+    //this->materials.push_back(new Material(path + "../resources/textures/8ball.png", 1.0));
+    //this->materials.push_back(new Material(path + "../resources/textures/flushed.png", "../resources/textures/flushed_normal.png", 0.0));
+    //this->materials.push_back(new Material(path + "../resources/textures/flushed.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,0.0), 0.2));
 
     sceneObjects.push_back(Sphere(Vector3(0, -1, -9), 2, Color::white, getRandomMaterial()));
 

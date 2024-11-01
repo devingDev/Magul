@@ -94,8 +94,12 @@ int main(int argc, char* argv[]){
   SDL_Surface* surf = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, 32, 0, 0, 0, 0);
   CopyToSurface(sceneImage, surf);
   tex = SDL_CreateTextureFromSurface(renderer, surf);
-  IMG_SavePNG(surf, "./render.png");
-  IMG_SaveJPG(surf, "./render.jpg", 50);
+
+  // Save to file as well
+  std::string savePath = std::string(SDL_GetBasePath()) + "./render.png";
+  IMG_SavePNG(surf, savePath.c_str());
+
+  // free the surface
   SDL_FreeSurface(surf);
 
 
@@ -105,7 +109,7 @@ int main(int argc, char* argv[]){
   rect1.w = 8;
 
 
-  SDL_FlashWindow(window, SDL_FLASH_BRIEFLY);
+  //SDL_FlashWindow(window, SDL_FLASH_BRIEFLY);
 
   SDL_Event currEvent;
   bool isRunning = true;
