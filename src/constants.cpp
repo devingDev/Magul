@@ -1,6 +1,6 @@
 #include "constants.h"
 
 
-const int WIDTH = 1024;
-const int HEIGHT = 1024;
+const int WIDTH = 20000;
+const int HEIGHT = 20000;
 

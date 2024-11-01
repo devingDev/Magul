@@ -17,29 +17,20 @@ Material* BasicScene::getRandomMaterial(){
     return this->materials[std::rand() % this->materials.size()];
 }
 
-BasicScene::BasicScene(){
+void BasicScene::InitializeSampleScene(){
     std::cout << "Initializing scene" << "\n";
     cam = Camera(90, WIDTH, HEIGHT);
     this->myImage = nullptr;
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
-    //this->materials.push_back(new Material("../resources/textures/test.png", 1.0));
+    this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 1.0));
+    this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,-0.0), 1.0));
     //this->materials.push_back(new Material("../resources/textures/test2.png", 0.0));
     //this->materials.push_back(new Material("../resources/textures/8ball.png", 1.0));
     //this->materials.push_back(new Material("../resources/textures/flushed.png", "../resources/textures/flushed_normal.png", 0.0));
-    this->materials.push_back(new Material("../resources/textures/flushed.png", 0.0));
+    //this->materials.push_back(new Material("../resources/textures/flushed.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,0.0), 0.2));
 
-
-    double radius = 2.0;
-    //sceneObjects.push_back(Sphere(Vector3(0,0,-15), radius, Color::white));
-    //sceneObjects.push_back(Sphere(Vector3(0,5,-15), radius, Color::red));
-
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++){
-           //sceneObjects.push_back(Sphere(Vector3(-10+(j*4 * (rand()%3)),-5+(i*3 * (rand()%3)),-15), radius, colors[j%4]));
-        }
-    }
     sceneObjects.push_back(Sphere(Vector3(0, -1, -9), 2, Color::white, getRandomMaterial()));
 
 
@@ -50,44 +41,18 @@ BasicScene::BasicScene(){
     sceneObjects.push_back(Sphere(Vector3(6, -2, -15), 2, Color::white, getRandomMaterial()));
     sceneObjects.push_back(Sphere(Vector3(-6, -2, -15), 2, Color::white, getRandomMaterial()));
     sceneObjects.push_back(Sphere(Vector3(7, -3, -12), 1, Color::white, getRandomMaterial()));
-    sceneObjects.push_back(Sphere(Vector3(-7, -3, -12), 1, Color::white, getRandomMaterial()));
+    sceneObjects.push_back(Sphere(Vector3(-7, -3, -12), 1, Color::white, new Material("../resources/textures/flushed.png", nullptr, Vector2(0.25,0.25), Vector2(0.0,0.0), 0.2)));
 
-
-
-    // Huge sphere just for casting a shadow on
-    //sceneObjects.push_back(Sphere(Vector3(0,-29994,0), -30000, Color(1.0, 0.8, 0.8, 0.8)));
-    //sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0)));
-    //sceneObjects.push_back(Sphere(Vector3(-17,17,-15), 3, Color::white));
-    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0), nullptr));
+    sceneObjects.push_back(Sphere(Vector3(0,-29994,-800), 30000, Color(1.0, 1.0, 1.0, 1.0), this->materials[0]));
 
     //sceneLights.push_back(new DirectionalLight(Vector3(11,10,0.7), Color::white, 0.7));
     sceneLights.push_back(new DirectionalLight(Vector3(11,10,11), Color::white, 0.7));
     sceneLights.push_back(new PointLight(Vector3(0,2, -30), Color::blue, 20));
     sceneLights.push_back(new PointLight(Vector3(0,2, 1), Color::red, 10));
+}
 
-    //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white, 1));
-    //directionalLights.push_back(DirectionalLight(Vector3(1,1,0.7), Color::red));
-    //directionalLights.push_back(DirectionalLight(Vector3(-1,1,0.7), Color::green));
-    //directionalLights.push_back(DirectionalLight(Vector3(0,1,0), Color::blue));
-    //sceneObjects.push_back(Sphere(Vector3(0, 0, -10), 4, Color(1.0, 1.0, 1.0, 1.0)));
-
-    //directionalLights.push_back(DirectionalLight(Vector3(11,10,0.7), Color::white));
-    //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-1), Color(1.0,1.0,1.0,1.0)* 1));
-    //directionalLights.push_back(DirectionalLight(Vector3(-1,-1,-0.7), Color(1.0, 1.0, 0.0, 0.0) * 1));
-    //directionalLights.push_back(DirectionalLight(Vector3(1,-1,-0.7), Color::blue));
-    //directionalLights.push_back(DirectionalLight(Vector3(-1,1,-0.7), Color::green));
-    //sceneLights.push_back(&directionalLights[0]);
-
-    //directionalLights.push_back(DirectionalLight(Vector3(-1,1,-0.3), Color::white));
-    //sceneLights.push_back(&directionalLights[1]);
-
-
-    //sceneLights.push_back(new PointLight(Vector3(0,1, -30), Color::magenta, 50));
-    //pointLights.push_back(PointLight(Vector3(0,1, -30), Color::magenta, 50));
-    //pointLights.push_back(PointLight(Vector3(0,5, 0), Color::white, 50));
-    //pointLights.push_back(PointLight(Vector3(0,1, -20), Color(1.0, 1.0, 0.0, 1.0) * 50));
-    //pointLights.push_back(PointLight(Vector3(0,1, 0), Color(1.0, 1.0, 1.0, 1.0) * 50));
-    //sceneLights.push_back(&pointLights[0]);
+BasicScene::BasicScene(){
+    this->InitializeSampleScene();
 
 }
 
