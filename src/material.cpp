@@ -72,13 +72,13 @@ Color Material::GetColor(SDL_Surface* texForCol, Vector2 uv){
         uv.x = uv.x - (long)uv.x;
     }
     if(uv.x < 0){
-        uv.x = uv.x + (long)uv.x;;
+        uv.x = uv.x + (long)uv.x;
     }
     if(uv.y >= 1){
         uv.y = uv.y - (long)uv.y;
     }
     if(uv.y < 0){
-        uv.y = uv.x + (long)uv.y;;
+        uv.y = uv.y + (long)uv.y;
     }
 
     // Find correct index for on SDL surface
