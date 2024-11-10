@@ -22,7 +22,9 @@ void BasicScene::InitializeSampleScene(){
 
     Color colors[] = {Color::white, Color::red, Color::green, Color::blue}; 
 
-    this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(1,1), Vector2(0.0,-0.0), 1.0));
+    this->materials.push_back(new Material("../resources/textures/checker.png", nullptr, Vector2(1,1), Vector2(0.0,0.0), 1.0));
+    //this->materials.push_back(new Material("../resources/textures/earth-2k-topo-july.png", nullptr, Vector2(1,1), Vector2(0.0,0.0), 1.0));
+    //this->materials.push_back(new Material("../resources/textures/CustomUVChecker_byValle_8K.png", nullptr, Vector2(0.25,.5), Vector2(0.0,-0.0), 1.0));
     //this->materials.push_back(new Material("../resources/textures/nocommit/xXxgraggazzZxXx.png", nullptr, Vector2(1,1), Vector2(0.05,0.0), 1.0));
     //this->materials.push_back(new Material("../resources/textures/nocommit/imagee.png", nullptr, Vector2(1,1), Vector2(-0.1,0), 0.0));
     //this->materials.push_back(new Material("../resources/textures/nocommit/image.png", nullptr, Vector2(1,1), Vector2(-0.1,0), 0.0));
